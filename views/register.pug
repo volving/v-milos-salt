@@ -1,0 +1,57 @@
+extends layout
+//- Created by volving on 8/31/16.
+mixin field(_label, _for, _type, _name, _id, _class, _placeholder)
+  .form-group
+    label.col-md-5.control-label(for=_for) #{_label}
+    .col-md-3
+      input.form-control(class=_class id=_id type=_type name=_name)
+
+block body
+  .container
+    h1.text-center 新用户注册
+    br
+
+  .container
+    form.form-horizontal(action="/register" role="form" method="POST")
+      input(type="hidden" name="_csrf" value=csrfToken)
+
+      +field('账户名', 'username', 'text', 'username', 'username', '', '请在此处输入手机号/邮箱/英文字母组合, 长度超过6个字符')
+      +field('登录密码', 'password', 'password', 'password', 'password', '', '')
+      +field('再次输入登录密码', 'password2', 'password', 'password2', 'password2', '', '')
+      +field('常用名', 'nickname', 'text', 'nickname', 'nickname', '', '')
+      +field('姓名全称', 'fullname', 'text', 'fullname', 'fullname', '', '')
+
+      .form-group
+        label.col-md-5.control-label(for="gender") 性别
+        .col-md-3
+          label.radio-inline
+            input#gender_male(type="radio" name="gender" value="m")
+            | 男
+          label.radio-inline
+            input#gender_female(type="radio" name="gender" value="f")
+            | 女
+          label.radio-inline
+            input#gender_other(type="radio" name="gender" value="x")
+            | 保密
+
+      +field('籍贯', 'text', 'region', 'region', '', '')
+      +field('Email', 'email', 'email', 'email', '', '')
+      +field('手机号', 'tel', 'mobile', 'mobile', '', '')
+      +field('证件号码(有效身份证等)', 'text', 'idno', 'idno', '', '')
+
+      .form-group
+        label.col-md-5.control-label(for="attachments") 认证附件 (可多选)
+        .col-md-3
+          input.form-control#attachments(type="file" name="attachments" multiple="multiple")
+
+      +field('邀请码(管理员)', 'text', 'usertype', 'usertype', '', '')
+
+      .form-group
+        .col-md-3.col-md-push-5
+          input#usercontract(type="checkbox" name="usercontract")
+          label(for="usercontract") &nbsp;我同意且遵守
+          a(href="#") 《用户协议》
+
+      .form-group
+        .col-xs-12.col-md-4.col-md-push-4
+          button#submit.btn.btn-primary.col-xs-12(type="submit") 提交

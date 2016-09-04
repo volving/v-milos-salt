@@ -1,0 +1,24 @@
+//- Created by volving on 8/31/16.
+extends layout
+
+
+block body
+  .container
+    h1.text-center 用户登录
+    br
+  .container
+    form.form-horizontal(action="/login" role="form" method="POST")
+      input(type="hidden" name="_csrf" value=csrfToken)
+      .form-group
+        label.col-md-4.control-label(for="username") 用户名
+        .col-md-4
+          input.form-control#username(type="text" name="username" placeholder="请在此处输入用户名,手机号/邮箱/英文字母, 长度超过6个字母")
+
+      .form-group
+        label.col-md-4.control-label(for="password") 登录密码
+        .col-md-4
+          input.form-control#password(type="password" name="password")
+
+      .form-group
+        .col-md-4.col-md-push-4
+          button#submit.btn.btn-primary.form-control(type="submit") 登录

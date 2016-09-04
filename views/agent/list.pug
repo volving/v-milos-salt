@@ -1,0 +1,42 @@
+extends ../layout
+
+block body
+  #agents.container
+    h1.text-center 网点查询
+    .row
+      form.form-horizontal(action="/agent" role="form" method="POST")#searchForm
+        input(type="hidden" name="_csrf" value=csrfToken)
+        .form-group
+          label.col-xs-12.col-sm-2.col-md-2.control-label(for="nameInput") 网点名称
+          .col-xs-12.col-sm-8.col-md-8
+            input.form-control#nameInput(type="text", name="nameInput")
+          .col-xs-12.col-sm-2.col-md-2
+            button#submit.btn.btn-primary.form-control(type="submit") 查询
+    br
+    br
+    if agents && agents.length > 0
+
+      .row
+        table.col-xs-12.table-striped.table-bordered.table-hover.text-center#agentList
+          thead
+            tr
+              th 合作机构名称
+              th 地址
+              th 联系人
+              th 电话
+              th 邮箱
+              th 营业时间
+          tbody
+            for item in agents
+              tr
+                -var url = '/agent/' + item._id
+                td
+                  a(href=url) #{item.name}
+                td= item.address
+                td= item.manager
+                td= item.tel
+                td= item.email
+                td= item.business_hours
+      br
+      .row.text-center
+        p 共有 #{total} 项, 每页 #{pageLimit} 项, 共 #{pageSize} 页

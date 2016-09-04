@@ -1,0 +1,42 @@
+{
+  "name": "salt",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.15.1",
+    "connect-flash": "^0.1.1",
+    "connect-timeout": "^1.7.0",
+    "cookie-parser": "~1.4.3",
+    "csurf": "^1.9.0",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "express-session": "^1.14.1",
+    "grunt": "^1.0.1",
+    "grunt-autoprefixer": "^3.0.4",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-less": "^1.4.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "helmet": "^2.1.2",
+    "less-middleware": "1.0.x",
+    "load-grunt-tasks": "^3.5.2",
+    "mongoose": "^4.6.0",
+    "morgan": "~1.7.0",
+    "ms": "^0.7.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-beta6",
+    "serve-favicon": "~2.3.0",
+    "time-grunt": "^1.4.0",
+    "x-xss-protection": "^1.0.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-newer": "^1.2.0"
+  }
+}

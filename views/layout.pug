@@ -1,0 +1,94 @@
+//- mixin alertMsg(_msgs, _type, _id)
+//-   if (_msgs && _msgs.length > 0)
+//-     -var _classes = '.alert.alert-' + _type + '.alert-dismissible(role="alert")'
+//-     div(id=_id class=_classes)
+//-       button(type="button" data-dismiss="alert" aria-label="close").close
+//-         span(aria-hidden="true") &times;
+//-       ul
+//-       each item in msgs
+//-         li= item
+
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    title= title
+    link(rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.css")
+    link(rel="stylesheet" href="/css/basic.css")
+    script(src="/vendor/jquery/dist/jquery.js")
+    script(src="/vendor/bootstrap/dist/js/bootstrap.js")
+    script(src="http://localhost:35729/livereload.js")
+    block head
+
+  body
+    #topbar
+      .container
+        a.item#intro(href="/about/process") 指纹系统流程介绍
+        a.item#contactus(href="/about/contactus") 联系我们
+        a.item#agents(href="/agent") 网点查询
+        a.item#agentCreate(href="/agent/create") 新网点录入
+
+
+        if(user)
+          a.item.floatright#signout(href="/logout") 退出登录
+          -var url = '/user/' + user._id;
+          a.item.floatright#user(href=url) #{user.username}
+        else
+          a.item.floatright#signin(href="/login") 您尚未登录(点此登录)
+          a.item.floatright#signup(href="/register") 注册
+
+
+    .container#returnBtn
+      .row
+        .col-md-3
+          a(href="/").btn.btn-default
+            i.glyphicon.glyphicon-home
+            |&nbsp;&nbsp;返回首页
+
+    br
+    br
+    .container
+      if (error && error.length > 0)
+        .alert.alert-danger.alert-dismissible(role="alert")#error
+          button(type="button" data-dismiss="alert" aria-label="close").close
+            span(aria-hidden="true") &times;
+          ul
+          each item in error
+            li= item
+      if (danger && danger.length > 0)
+        .alert.alert-danger.alert-dismissible(role="alert")#danger
+          button(type="button" data-dismiss="alert" aria-label="close").close
+            span(aria-hidden="true") &times;
+          ul
+          each item in danger
+            li= item
+      if (warning && warning.length > 0)
+        .alert.alert-warning.alert-dismissible(role="alert")#warning
+          button(type="button" data-dismiss="alert" aria-label="close").close
+            span(aria-hidden="true") &times;
+          ul
+          each item in warning
+            li= item
+
+      if (info && info.length > 0)
+        .alert.alert-info.alert-dismissible(role="alert")#info
+          button(type="button" data-dismiss="alert" aria-label="close").close
+            span(aria-hidden="true") &times;
+          ul
+          each item in info
+            li= item
+      if (success && success.length > 0)
+        .alert.alert-success.alert-dismissible(role="alert")#success
+          button(type="button" data-dismiss="alert" aria-label="close").close
+            span(aria-hidden="true") &times;
+          ul
+          each item in success
+            li= item
+
+    block body
+
+    block scripts
+
+    block footer
+
+

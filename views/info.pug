@@ -1,0 +1,7 @@
+extends layout
+block head
+    title #{message || '~~'}
+block body
+  .container.text-center
+    h1= title
+    p= content

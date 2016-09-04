@@ -1,0 +1,29 @@
+extends ../layout
+
+mixin inputField(_label, _for, _type, _name, _id, _class, _value)
+  .col-xs-12.col-sm-6
+    .form-group
+      label.col-md-3.control-label(for=_for) #{_label}
+      .col-md-9
+        input.form-control(class=_class, id=_id, type=_type, name=_name, value=_value)
+
+block body
+  #agent.container
+    h1.text-center 网点信息维护
+    br
+  .container
+    form.form-horizontal(action="/agent/upsert" role="form" method="POST")
+      .row
+        input(type="hidden" name="_csrf" value=csrfToken)
+        input(type="hidden" name="_id" value=item._id)
+        +inputField('联系人', 'manager', 'text', 'manager', 'manager', '', item.contact.name)
+        +inputField('联系人电话', 'managerTel', 'tel', 'managerTel', 'managerTel', '', item.contact.tel)
+        +inputField('合作机构名称', 'name', 'text', 'name', 'name', '', item.name)
+        +inputField('地址', 'address', 'text', 'address', 'address', '', item.address)
+        +inputField('办公电话', 'tel', 'tel', 'tel', 'tel', '', item.tel)
+        +inputField('邮箱', 'email', 'email', 'email', 'email', '', item.email)
+        +inputField('营业时间', 'business_hours', 'text', 'business_hours', 'business_hours', '', item.email)
+      .row
+        .form-group
+          .col-xs-12.col-sm-12.col-md-4.col-md-push-4
+            button#submit.btn.btn-primary.col-xs-12(type="submit") 提交
