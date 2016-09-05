@@ -103,6 +103,7 @@ app.use(function(req, res, next) {
 var index = require('./routes/index');
 var about = require('./routes/about');
 var agent = require('./routes/agent');
+var identify = require('./routes/identify');
 // var admin = require('./routes/admin');
 // var super = require('./routes/super');
 
@@ -110,6 +111,7 @@ var agent = require('./routes/agent');
 app.use('/', index);
 app.use('/about', about);
 app.use('/agent', agent);
+app.use('/identify', identify);
 // app.use('/admin', admin);
 // app.use('/super', super);
 
