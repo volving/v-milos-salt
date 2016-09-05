@@ -1,0 +1,18 @@
+mixin field(_label, _for, _type, _name, _id, _class)
+  .row
+    .form-group
+      label.control-label(for=_for) #{_label}
+      input.form-control(class=_class, id=_id, type=_type, name=_name)
+
+mixin fileField(_label, _for, _type, _name, _id, _class, _multi)
+  .row
+    .form-group
+      label.control-label(for=_for) #{_label}
+      input.form-control(class=_class, id=_id, type=_type, name=_name, accept="image/*")
+      //- multiple=_multi,
+
+mixin limitFileField(_label, _for, _type, _name, _id, _class)
+  .row
+    .form-group
+      label.control-label(for=_for) #{_label}
+      input.form-control(class=_class, id=_id, type=_type, name=_name, accept="image/*")

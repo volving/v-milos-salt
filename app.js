@@ -12,7 +12,7 @@ var xssFilter = require('x-xss-protection');
 var helmet = require('helmet');
 var flash = require('connect-flash');
 // var timeout = require('connect-timeout');
-var csrf = require('csurf');
+
 var ms = require('ms');
 
 
@@ -39,7 +39,8 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use(csrf());
+// var csrf = require('csurf');
+// app.use(csrf());
 app.use(helmet.hsts({
     maxAge: ms('1 year'),
     includeSubdomains: true

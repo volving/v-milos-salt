@@ -1,3 +1,65 @@
 extends ../layout
 
+mixin field(_label, _for, _type, _name, _id, _class)
+  .row
+    .form-group
+      label.control-label(for=_for) #{_label}
+      input.form-control(class=_class, id=_id, type=_type, name=_name)
+
+mixin fileField(_label, _for, _type, _name, _id, _class)
+  .row
+    .form-group
+      label.control-label(for=_for) #{_label}
+      input.form-control(class=_class, id=_id, type=_type, name=_name, accept="image/*")
+
 block body
+  #identify.container
+    .row
+      .col-xs-12
+        ul.processing
+          li.col-md-4.undergoing
+            span.leading 1
+            span 录入作品资料
+          li.col-md-4
+            span.leading 2
+            span 上传纸纹照片
+          li.col-md-4
+            span.leading 3
+            span 完成申请提交
+    br
+    br
+
+    form.form-horizontal(action="/identify/pre" method="POST" enctype="multipart/form-data")
+      input(type="hidden" name="_csrf" value=csrfToken)
+      .row
+        hr
+        ul
+          li 红色标签项为必填项
+        hr
+      .row
+        .col-md-4.col-md-offset-1
+          h3.text-center 作品资料
+          +field('作品名称', 'title', 'text', 'title', 'title', 'essential')
+          +field('作者', 'artist', 'text', 'artist', 'artist', 'essential')
+          +field('合作者', 'coartist', 'text', 'coartist', 'coartist', '')
+          +field('类型', 'category', 'text', 'category', 'category', 'essential')
+          +field('创作时间', 'times', 'text', 'times', 'times', 'essential')
+          +field('尺寸', 'size', 'text', 'size', 'size', 'essential')
+          //- +field('是否在平台销售', 'onplatform', 'text', 'onplatform', 'onplatform', 'essential')
+          //- +field('历史', 'title', 'text', 'title', 'title', 'essential')
+          .row
+            .form-group
+              input(id="onplatform", type="checkbox", name="onplatform", value="true")
+              label.control-label(for="onplatform") &nbsp;&nbsp;本作品在 "三真艺术" 平台销售
+        .col-md-4.col-md-offset-2
+          h3.text-center 申请者资料
+          +field('姓名', 'name', 'text', 'name', 'name', 'essential')
+          +field('手机号', 'tel', 'text', 'tel', 'tel', 'essential')
+          +field('身份证号', 'idno', 'text', 'idno', 'idno', 'essential')
+          +fileField('认证附件', 'attachments', 'file', 'attachments', 'attachments', 'essential')
+          +fileField('与作品合影', 'photo', 'file', 'photo', 'photo', 'essential')
+
+      .row
+        .col-md-4.col-md-offset-4
+
+          button#submit.btn.btn-primary.col-xs-12(type="submit") 下一步

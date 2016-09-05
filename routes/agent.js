@@ -17,7 +17,7 @@ router.all('/', function(req, res) { //jshint ignore: line
     });
     Agent.find({ name: reg }).limit(limit).exec(function(err, agents) {
         res.render('./agent/list', {
-            csrfToken: req.csrfToken(),
+            // csrfToken: req.csrfToken(),
             agents: agents,
             total: total,
             pageLimit: limit,
@@ -28,7 +28,7 @@ router.all('/', function(req, res) { //jshint ignore: line
 
 router.get('/create', function(req, res, next) { //jshint ignore: line
     res.render('./agent/create', {
-        csrfToken: req.csrfToken(),
+        // csrfToken: req.csrfToken(),
         item: {
 
         }
@@ -72,7 +72,7 @@ router.get('/:id', function(req, res, next) { //jshint ignore: line
             return res.redirect('/agent');
         }
         res.render('./agent/edit', {
-            csrfToken: req.csrfToken(),
+            // csrfToken: req.csrfToken(),
             item: agent
         });
     });

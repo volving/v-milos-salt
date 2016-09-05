@@ -1,0 +1,49 @@
+extends ../layout
+include ../utils/mixins
+
+block body
+  #identify.container
+    .row
+      .col-xs-12
+        ul.processing
+          li.col-md-4.done
+            span.leading 1
+            span 录入作品资料
+          li.col-md-4.undergoing
+            span.leading 2
+            span 上传纸纹照片
+          li.col-md-4
+            span.leading 3
+            span 完成申请提交
+    br
+    br
+
+    form.form-horizontal(action="/identify/record" method="POST" enctype="multipart/form-data")
+      input(type="hidden" name="_csrf" value=csrfToken)
+      input(type="hidden" name="_identify" value=identify_id)
+      .row
+        hr
+        ul
+          li 红色标签项为必填项
+        hr
+      .row
+        .col-md-4.col-md-offset-1
+          //- mixin field(_label, _for, _type, _name, _id, _class)
+          +fileField('全景图', 'fullview', 'file', 'fullview', 'fullview', 'essential')
+          +fileField('预览图', 'preview', 'file', 'preview', 'preview', 'essential')
+          +fileField('纸纹图', 'magnifyview', 'file', 'magnifyview', 'magnifyview', 'essential')
+          +field('镜头倍数', 'zoom', 'text', 'zoom', 'zoom', '')
+          +field('备注', 'remarks', 'text', 'remarks', 'remarks', '')
+          span.btn.btn-success.col-xs-4.col-xs-offset-4 增加一组
+        .col-md-5.col-md-offset-1.text-center
+          br
+          .col-md-6
+            canvas#previewCanvas(style="width: 220px; height: 220px; box-shadow: 0 0 1px 0 grey;")
+            h4 预览图
+          .col-md-6
+            canvas#magnifyCanvas(style="width: 220px; height: 220px; box-shadow: 0 0 1px 0 grey;")
+            h4 纸纹图
+      .row
+        .col-md-4.col-md-offset-4
+          button.btn.btn-primary.col-xs-12(type="submit") 下一步
+

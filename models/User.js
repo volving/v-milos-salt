@@ -27,6 +27,10 @@ var userSchema = new Schema({
     register_ts: {
         type: Date,
         default: Date.now
+    },
+    lastsession: {
+        which: String,
+        id: String
     }
 });
 

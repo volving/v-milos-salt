@@ -71,8 +71,13 @@ li {
   text-align: center;
   padding: 0 .5em;
 }
-#certCertee .progressing .leading,
-#certUpload .progressing .leading {
+#identify .processing {
+  list-style: none;
+}
+#identify .processing li {
+  display: inline-block;
+}
+#identify .processing .leading {
   display: inline-block;
   width: 1.6em;
   height: 1.6em;
@@ -84,33 +89,17 @@ li {
   background-color: grey;
   margin-right: .5em;
 }
-#certCertee .progressing .process-done .leading,
-#certUpload .progressing .process-done .leading {
+#identify .processing .done .leading {
   background-color: #337ab7;
 }
-#certCertee .progressing .process-done .content,
-#certUpload .progressing .process-done .content {
+#identify .processing .done .content {
   color: #337ab7;
 }
-#certCertee .progressing .process-undergoing .leading,
-#certUpload .progressing .process-undergoing .leading {
+#identify .processing .undergoing .leading {
   background-color: #3d773e;
 }
-#certCertee .progressing .process-undergoing .content,
-#certUpload .progressing .process-undergoing .content {
+#identify .processing .undergoing .content {
   color: #3d773e;
-}
-#certCertee .content .previewable canvas,
-#certUpload .content .previewable canvas {
-  box-shadow: 0 0 1px 1px #337ab7;
-  height: 260px;
-  width: 260px;
-}
-#certCertee .groups canvas,
-#certUpload .groups canvas {
-  box-shadow: 0 0 1px 1px #337ab7;
-  width: 100px;
-  height: 100px;
 }
 #certSearch #results th,
 #certSearch #results td {

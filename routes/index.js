@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) { //jshint ignore: line
 });
 router.get('/register', function(req, res) { //jshint ignore: line
     res.render('register', {
-        csrfToken: req.csrfToken()
+        // csrfToken: req.csrfToken()
     });
 });
 
@@ -83,7 +83,7 @@ router.post('/register', function(req, res, next) { //jshint ignore: line
 
 router.get('/login', function(req, res) { //jshint ignore: line
     res.render('login', {
-        csrfToken: req.csrfToken()
+        // csrfToken: req.csrfToken()
     });
 });
 // router.post('/login', function(req, res, next) { //jshint ignore: line
@@ -150,10 +150,10 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
         password = req.body.password || '';
     var warning = [];
     if (username.length === 0) {
-        warning.push('用户名是必填项, 请输入!');
+        warning.push('用户名是必填项, 请输入');
     }
     if (password.length === 0) {
-        warning.push('密码是必填项, 请输入!');
+        warning.push('密码是必填项, 请输入');
     }
     if (warning.length > 0) {
         req.flash('warning', warning);
@@ -164,14 +164,14 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
             return next(err);
         }
         if (!user) {
-            req.flash('warning', ['没找到该用户']);
+            req.flash('warning', [info.message]);
             return res.redirect('/login');
         }
         req.logIn(user, function(err) {
             if (err) {
                 return next(err);
             }
-            req.flash('success', ['您已登录!']);
+            req.flash('success', ['欢迎登录!']);
             res.redirect('/');
         });
     })(req, res, next);
