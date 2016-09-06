@@ -1,0 +1,26 @@
+extends layout
+
+block body
+  #certSearch.container
+    .row#search
+      form.form-horizontal(action="/search" rol="form" method="GET")
+        //- input(type="hidden" name="_csrf" value="#{csrfToken}")
+        .col-sm-6.col-sm-offset-2.col-md-6.col-md-offset-2
+          input.form-control#searchInput(type="text" name="search")
+        .col-sm-2.col-md-2
+          input.btn.btn-primary.form-control(type="submit" value="搜索")
+    br
+    br
+
+    if artworks && artworks.length > 0
+      .row#results
+        .col-xs-12.col-sm-6.col-sm-offset-2.card
+          for item in artworks
+            a(href="#")
+              div(style="margin: .5em; padding: .5em; display: inline-block; float: left; width: 200px; height: 200px;box-shadow: 0 0 1px 0 grey;")
+                -var src='/uploads/'+ item._id
+                img(src=src, alt="")
+                p= item.title
+                p= item.artist.name
+                p= item.category
+                p= item.times

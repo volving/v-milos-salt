@@ -9,14 +9,14 @@ block body
       .logo
 
     #search
-      form.form-vertical(action="/artwork/manage" method="GET")
+      form.form-vertical(action="/search" rol="form" method="GET")
         .form-group
           .row
             .col-xs-10.col-sm-8.col-sm-offset-2.col-md-5.col-md-offset-3
               p 请输入作品名称或指纹编号进行检索
           .row
             .col-xs-10.col-sm-8.col-sm-offset-2.col-md-5.col-md-offset-3
-              input.form-control#searchInput(type="text" name="searchInput")
+              input.form-control#searchInput(type="text" name="search")
               //- placeholder="请输入作品名称或指纹编号进行检索"
             .col-xs-2.col-sm-1.col-xs-3
               button.btn.btn-primary(type="submit") 搜索
@@ -27,6 +27,6 @@ block body
           .col-sm-4.col-sm-offset-4.text-center
             .row
               .col-sm-4
-                a.btn.btn-primary(href="/cert/create") 创建纸纹
+                a.btn.btn-primary(href="/identify") 创建纸纹
               .col-sm-4.col-sm-push-4
-                a.btn.btn-primary(href="/cert/manage") 管理纸纹
+                a.btn.btn-primary(href="/#") 管理纸纹

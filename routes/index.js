@@ -5,6 +5,7 @@ var router = express.Router();
 var User = require('../models/User');
 var passport = require('passport');
 
+var Artwork = require('../models/Artwork');
 // router.use(function(req, res, next){
 //     next();
 // });
@@ -180,6 +181,30 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
 router.get('/logout', function(req, res) { //jshint ignore: line
     req.logout();
     res.redirect('/');
+});
+
+
+router.get('/search', function(req, res, next) { //jshint ignore: line
+    // var search = req.query.search;
+
+    // if (!search) {
+
+    // }
+
+    Artwork.find({}).populate('artist coartist').exec(function(err, list) {
+        if (err) {
+            return next(err);
+        }
+        if (!list) {
+            return next();
+        }
+        console.log(list);
+        return res.render('./search', {
+            artworks: list
+        });
+    });
+
+    // return res.render('./search', {});
 });
 
 

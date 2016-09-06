@@ -14,6 +14,11 @@ var Identify = require('../models/Identify'),
     Artwork = require('../models/Artwork'),
     Artist = require('../models/Artist'),
     Doc = require('../models/Doc');
+
+function getMongoId(str){
+    return mongoose.Types.ObjectId(str);
+}
+
 router.use(function(req, res, next) {
     if (!req.user) {
         req.flash('info', ['请您先登录']);
@@ -41,6 +46,7 @@ router.post('/pre', uploader.fields([
     if (!files) {
         return res.redirect('/identify/record');
     }
+    console.log(files);
     for (var file in files) {
         form[file] = files[file][0].filename;
     }
@@ -79,10 +85,12 @@ router.post('/pre', uploader.fields([
     }).then(function() {
         var artist_id = objs.artist && objs.artist._id || undefined,
             coartist_id = objs.coartist && objs.coartist._id || undefined;
+            console.log('artist_id:' + artist_id);
+            console.log('coartist_id:' + coartist_id);
         var artwork = new Artwork({
             title: req.body.title,
-            artist: artist_id,
-            coartist: coartist_id,
+            artist: getMongoId(artist_id),
+            coartist: getMongoId(coartist_id),
             category: req.body.category,
             times: req.body.times,
             size: req.body.size,
@@ -138,9 +146,6 @@ router.get('/record', function(req, res, next) { //jshint ignore: line
     Identify.findOne({ _id: mongoose.Types.ObjectId(identify_id) }).populate('docs').exec().then(function(obj) {
         if (obj) {
             var docs = obj.docs;
-            console.log(identify_id);
-            console.log(obj);
-            console.log(docs);
             res.render('./identify/record', {
                 // csrfToken: req.csrfToken(),
                 identify_id: identify_id,
@@ -184,7 +189,7 @@ router.post('/record', uploader.fields([
         // }
         // console.log(obj, identify_id);
         if (obj && identify_id) {
-            Identify.findOne({ _id: mongoose.Types.ObjectId(identify_id)}).exec(function(err, idf) {
+            Identify.findOne({ _id: getMongoId(identify_id)}).exec(function(err, idf) {
                 if (idf) {
                     idf.docs.push(obj._id);
                     // var docs = idf.docs || [];
@@ -192,7 +197,6 @@ router.post('/record', uploader.fields([
                     // idf.docs = docs;
                     // obj.docs = [obj._id];
                     idf.save(function(err, idtf){
-                        console.log(idtf);
                         if (err) {
                             return next(err);
                         }
