@@ -255,7 +255,7 @@ module.exports = function(grunt) {
                 src: ['<%= config._prefixed %>/*']
             },
             dist: {
-                src: ['<%= config._dist %>/*']
+                // src: ['<%= config._dist %>/*']
             },
             tmp: {
                 src: ['<%= config._tmp %>/*']
