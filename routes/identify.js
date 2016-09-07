@@ -118,9 +118,12 @@ router.post('/pre', uploader.fields([
         });
     }).then(function() {
         // save identify && add req.session.identify_id
+        var sid = new mongoose.Types.ObjectId();
         var identify = new Identify({
             applicant: objs.applicant._id,
-            docs: []
+            docs: [],
+            artwork: objs.artwork._id,
+            sid: sid
         });
         return identify.save().then(function(obj) {
             if (!obj) {
@@ -131,19 +134,18 @@ router.post('/pre', uploader.fields([
             objs.identify = obj;
             var _id = obj._id;
             req.session.identify_id = _id;
-
+            req.session.sid = sid;
             return objs;
         });
     }).then(function() {
         // save identity && add req.session.identity_id
-        var sid = new mongoose.Types.ObjectId();
-
+        var sid = req.session.sid;
         var title = objs.artworkd && objs.artworkd.title || '',
             artist = objs.artwork && objs.artwork.artist || undefined,
             artwork = objs.artwork && objs.artwork._id || undefined,
             identify = objs.identify && objs.identify._id || undefined,
             identifys = [];
-        if (identity) {
+        if (identify) {
             identifys.push(identify);
         }
         var identity = new Identity({
@@ -223,7 +225,7 @@ router.post('/record', uploader.fields([
         //     req.flash('warning', ['所需参数未能提供而出错, 请按流程操作']);
         //     return;
         // }
-        // console.log(obj, identify_id);
+        console.log(obj,'\n'+ identify_id);
         if (err) {
             req.flash('warning', ['保存时发生错误']);
             return next(err);
@@ -260,6 +262,7 @@ router.post('/record', uploader.fields([
 
 router.get('/post', function(req, res) { //jshint ignore: line
     delete req.session.identify_id;
+    delete req.session.sid;
     res.render('./identify/post');
 });
 

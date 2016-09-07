@@ -9,13 +9,14 @@ var multer = require('multer');
 var uploader = multer({
     dest: './public/uploads'
 });
-var Identity = require('../models/Identity');
+var Identify = require('../models/Identify');
+// var Identity = require('../models/Identity');
 // router.use(function(req, res, next){
 //     next();
 // });
 /* GET home page. */
 router.get('/', function(req, res, next) { //jshint ignore: line
-    res.render('index', { title: 'Express' });
+    res.render('index');
 });
 router.get('/register', function(req, res) { //jshint ignore: line
     res.render('register', {
@@ -228,17 +229,40 @@ router.get('/search', function(req, res, next) { //jshint ignore: line
     //     });
     // });
 
-    Identity.find(condition).populate('artwork').exec(function(err, list) {
+    // Identity.find(condition).populate('artwork').exec(function(err, list) {
+    //     if (err) {
+    //         return next(err);
+    //     }
+    //     if (!list) {
+    //         req.flash('info', ['没有查询到相应记录']);
+    //         return res.render('./search');
+    //     }
+    //     return res.render('./search', {
+    //         identitys: list
+    //     });
+    // });
+    Identify.find(condition).populate([{
+        path: 'docs',
+        select: 'fullview zoom',
+        options: {
+            sort: { ts: -1 }
+        }
+    }, {
+        path: 'artwork',
+        select: 'title category'
+    }]).exec(function(err, list) {
         if (err) {
+            req.flash('warning', ['查询出错']);
             return next(err);
         }
         if (!list) {
-            req.flash('info', ['没有查询到相应记录']);
+            req.flash('warning', ['没有查询到相应记录']);
             return res.render('./search');
         }
         return res.render('./search', {
-            identitys: list
+            identifys: list
         });
+
     });
 });
 

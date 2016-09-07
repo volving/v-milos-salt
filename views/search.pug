@@ -12,15 +12,32 @@ block body
     br
     br
 
-    if identitys && identitys.length > 0
+    if identifys && identifys.length > 0
       .row#results
-        .col-xs-12.col-sm-6.col-sm-offset-2.card
-          for item in identitys
-            a(href="#")
-              div(style="margin: .5em; padding: .5em; display: inline-block; float: left; width: 200px; height: 200px;box-shadow: 0 0 1px 0 grey;")
-                -var src='/uploads/'+item.sid.trim()
-                img(src=src, alt="")
-                p= item.title
-                //- p= item.artist.name
-                p= item.category
-                p= item.times
+        .col-xs-12.card
+          each item in identifys
+            div(style="margin: .5em; padding: .5em; display: inline-block; float: left; width: 300px; box-shadow: 0 0 1px 0 grey;")
+              //- div= item
+              if item.docs[0]
+                -var src='/uploads/'+item.docs[0].fullview
+                img(src=src, alt="").img-responsive
+                br
+                .col-xs-12.bg-info 标题
+                .col-xs-12= item.artwork.title
+                .col-xs-12.bg-info 大类
+                .col-xs-12= item.artwork.category
+                .col-xs-12.bg-info 放大倍数
+                .col-xs-12= item.docs[0].zoom
+                .col-xs-12.bg-info 编号
+                .col-xs-12= item.sid
+              else
+                br
+                img(alt="没有全景图").img-responsive
+                .col-xs-12.bg-info 标题
+                .col-xs-12= item.artwork.title
+                .col-xs-12.bg-info 大类
+                .col-xs-12= item.artwork.category
+              .col-xs-12
+                br
+                -var url = "/verify/compare/" + item._id
+                a(href=url).btn.btn-primary.col-xs-6.col-xs-offset-3 比对

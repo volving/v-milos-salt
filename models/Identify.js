@@ -11,6 +11,11 @@ var identifySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Doc'
     }],
+    artwork: {
+        type: Schema.Types.ObjectId,
+        ref: 'Artwork'
+    },
+    sid: String,
     ts: {
         type: Date,
         default: Date.now

@@ -107,7 +107,9 @@ var agent = require('./routes/agent');
 var identify = require('./routes/identify');
 var compare = require('./routes/compare');
 var admin = require('./routes/admin');
+var verify = require('./routes/verify');
 // var super = require('./routes/super');
+
 
 
 app.use('/', index);
@@ -116,6 +118,7 @@ app.use('/agent', agent);
 app.use('/identify', identify);
 app.use('/compare', compare);
 app.use('/admin', admin);
+app.use('/verify', verify);
 // app.use('/super', super);
 
 // catch 404 and forward to error handler
