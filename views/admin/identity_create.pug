@@ -1,0 +1,11 @@
+extends ../layout
+include ../utils/mixins
+
+block body
+  .container
+    .row
+      h1.text-center 新建 艺术品档案
+
+    form.form-horizontal(action="/admin/identity/create" role="form" method="POST" enctype="multipart/form-data")
+      input(type="hidden" name="_csrf" value=csrfToken)
+

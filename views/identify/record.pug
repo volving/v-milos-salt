@@ -34,16 +34,55 @@ block body
           +fileField('纸纹图', 'magnifyview', 'file', 'magnifyview', 'magnifyview', 'essential')
           +field('镜头倍数', 'zoom', 'text', 'zoom', 'zoom', '')
           +field('备注', 'remarks', 'text', 'remarks', 'remarks', '')
-          span.btn.btn-success.col-xs-4.col-xs-offset-4 增加一组
+
         .col-md-5.col-md-offset-1.text-center
           br
           .col-md-6
-            canvas#previewCanvas(style="width: 220px; height: 220px; box-shadow: 0 0 1px 0 grey;")
+            canvas#previewCanvas(style="width: 180px; height: 180px; box-shadow: 0 0 1px 0 grey;").img-responsive
             h4 预览图
           .col-md-6
-            canvas#magnifyCanvas(style="width: 220px; height: 220px; box-shadow: 0 0 1px 0 grey;")
+            canvas#magnifyCanvas(style="width: 180px; height: 180px; box-shadow: 0 0 1px 0 grey;").img-responsive
             h4 纸纹图
       .row
         .col-md-4.col-md-offset-4
-          button.btn.btn-primary.col-xs-12(type="submit") 下一步
+          button.btn.btn-success.col-xs-12.col-sm-4.col-sm-offset-1(type="submit") 增加一组
+          a(href="/identify/post").btn.btn-primary.col-xs-12.col-sm-4.col-sm-offset-2 下一步
+
+      each doc in docs
+        br
+        .row(style="box-shadow: 0 0 1px 1px grey;padding: 5px 0")
+          .col-md-3
+            .row
+              .col-md-4
+                p.bg-info 镜头倍数
+              .col-md-8
+                = doc.zoom
+            .row
+              .col-md-12
+                p.bg-info 备注内容
+              .col-md-12
+                span= doc.remarks
+          .col-md-9
+            if doc.fullview
+              -var src = '/uploads/' + doc.fullview;
+                .col-md-4
+                  img(src=src, alt="").img-responsive
+            else
+              .col-md-4
+                p 无全景图
+            if doc.preview
+              -var src2 = '/uploads/' + doc.preview;
+                .col-md-4
+                  img(src=src2, alt="").img-responsive
+            else
+              .col-md-4
+                p 无预览图
+            if doc.magnifyview
+              -var src3 = '/uploads/' + doc.magnifyview;
+                .col-md-4
+                  img(src=src3, alt="").img-responsive
+            else
+              .col-md-4
+                p 无纸纹图
+        br
 

@@ -39,14 +39,14 @@ router.get('/pre', function(req, res) { //jshint ignore: line
 
 router.post('/pre', uploader.fields([
     { name: 'attachments', maxCount: 1 },
-    { name: 'photo', maxCount: 1 }
+    { name: 'photos', maxCount: 1 }
 ]), function(req, res, next) { //jshint ignore: line
     var form = req.body;
     var files = req.files;
     if (!files) {
         return res.redirect('/identify/record');
     }
-    console.log(files);
+
     for (var file in files) {
         form[file] = files[file][0].filename;
     }
@@ -55,14 +55,10 @@ router.post('/pre', uploader.fields([
         name: req.body.name,
         tel: req.body.tel,
         idno: req.body.idno,
-        attachments: form.attachments,
-        photo: form.photo
+        attachments: [form.attachments],
+        photos: [form.photos]
     });
     var objs = {};
-
-
-
-
 
     /**
      * save applicant
@@ -101,8 +97,6 @@ router.post('/pre', uploader.fields([
         // save artwork
         var artist_id = objs.artist && objs.artist._id || undefined,
             coartist_id = objs.coartist && objs.coartist._id || undefined;
-        console.log('artist_id:' + artist_id);
-        console.log('coartist_id:' + coartist_id);
         var artwork = new Artwork({
             title: req.body.title,
             artist: getMongoId(artist_id),
@@ -110,7 +104,9 @@ router.post('/pre', uploader.fields([
             category: req.body.category,
             times: req.body.times,
             size: req.body.size,
-            onplatform: req.body.onplatform
+            onplatform: req.body.onplatform,
+            url: req.body.url
+
         });
         return artwork.save().then(function(obj) {
             if (!obj) {
@@ -124,7 +120,6 @@ router.post('/pre', uploader.fields([
         // save identify && add req.session.identify_id
         var identify = new Identify({
             applicant: objs.applicant._id,
-            artwork: objs.artwork._id,
             docs: []
         });
         return identify.save().then(function(obj) {
@@ -255,8 +250,7 @@ router.post('/record', uploader.fields([
                         req.flash('warning', ['未能将该纸纹记录添加到对应艺术品']);
                         return req.redirect('/identify/record');
                     }
-                    delete req.session.identify_id;
-                    return res.redirect('/identify/post');
+                    return res.redirect('/identify/record');
                 });
                 return idf;
             });
@@ -265,7 +259,7 @@ router.post('/record', uploader.fields([
 });
 
 router.get('/post', function(req, res) { //jshint ignore: line
-    console.log(req.session);
+    delete req.session.identify_id;
     res.render('./identify/post');
 });
 

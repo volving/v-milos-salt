@@ -55,6 +55,10 @@ router.post('/create', function(req, res, next) { //jshint ignore: line
 });
 
 router.get('/:id', function(req, res, next) { //jshint ignore: line
+    if (!(req.user && req.user.usertype.indexOf('admin') > -1)) {
+        req.flash('warning', ['无权访问, 请先登录管理员账号']);
+        return res.redirect('/login');
+    }
     var id = req.params.id;
     if (id.length < 24) {
         req.flash('warning', ['没有该记录']);

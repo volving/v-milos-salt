@@ -6,6 +6,7 @@ var Identity = require('../models/Identity');
 var Artist = require('../models/Artist');
 var Artwork = require('../models/Artwork');
 var Doc = require('../models/Doc');
+var Applicant = require('../models/Applicant');
 
 var multer = require('multer');
 var uploader = multer({
@@ -25,6 +26,8 @@ router.get('/', function(req, res, next) { //jshint ignore: line
     res.render('admin/controlpanel');
 });
 
+//------------------------------------------------Start of IDENTITY
+
 router.get('/identity', function(req, res, next) { //jshint ignore: line
     Identity.find({}).populate('artwork verifys identifys').exec(function(err, idts) {
         if (err) {
@@ -43,8 +46,57 @@ router.get('/identity', function(req, res, next) { //jshint ignore: line
 });
 
 router.get('/identity/create', function(req, res, next) { //jshint ignore: line
-    return res.render('admin/identity_create');
+    Applicant.find({}).exec(function(err, applicants) {
+        if (err) {
+            req.flash('warning', ['查询申请者档案时出错']);
+            return next(err);
+        }
+        if (!applicants) {
+            req.flash('warning', ['尚无申请者档案, 请先创建']);
+            return res.redirect('/admin/identity');
+        }
+        return res.render('admin/identity_create', {
+            title: '新建艺术品档案',
+            applicants: applicants
+        });
+    });
 });
+router.post('/artwork/create', function(req, res, next) { //jshint ignore: line
+    console.log(req.body);
+    var title = req.body.title || '',
+        artist = req.body.artist || undefined,
+        coartist = req.body.coartist || undefined,
+        category = req.body.category || '',
+        times = req.body.times || '',
+        size = req.body.size || '',
+        remarks = req.body.remarks || '',
+        onplatform = req.body.onplatform || false,
+        url = req.body.url || '';
+    var artwork = new Artwork({
+        title: title,
+        artist: artist,
+        coartist: coartist,
+        category: category,
+        times: times,
+        size: size,
+        remarks: remarks,
+        onplatform: onplatform,
+        url: url
+    });
+    artwork.save(function(err, artwork) {
+        if (err) {
+            req.flash('warning', ['保存艺术品档案过程中出错']);
+            return next(err);
+        }
+        if (!artwork) {
+            req.flash('warning', ['未能保存成功']);
+        }
+        req.flash('success', ['保存成功']);
+        return res.redirect('/admin/artwork/create');
+    });
+});
+
+//------------------------------------------------End __of IDENTITY
 
 
 //------------------------------------------------Start of ARTIST
@@ -214,7 +266,7 @@ router.post('/doc/create', uploader.fields([
         req.flash('warning', ['没有添加文件']);
         return res.redirect('/admin/doc/create');
     }
-    for(var file in files){
+    for (var file in files) {
         form[file] = files[file][0].filename;
     }
 
@@ -225,7 +277,7 @@ router.post('/doc/create', uploader.fields([
         zoom: form.zoom,
         remarks: form.remarks
     });
-    doc.save(function(err, obj){
+    doc.save(function(err, obj) {
         if (err) {
             req.flash('warning', ['保存纸纹档案时发生错误']);
             return next(err);
@@ -241,6 +293,68 @@ router.post('/doc/create', uploader.fields([
 });
 
 //------------------------------------------------End __of DOC
+
+
+//------------------------------------------------Start of APPLICANT
+router.get('/applicant', function(req, res, next) { //jshint ignore: line
+    Applicant.find({}).exec(function(err, applicants) {
+        if (err) {
+            req.flash('warning', ['查询申请者档案过程中出错']);
+            return next(err);
+        }
+        if (!applicants) {
+            req.flash('warning', ['未能查询到申请者档案']);
+            return res.render('admin/applicant', {
+                title: '申请者档案'
+            });
+        }
+        return res.render('admin/applicant', {
+            title: '申请者档案',
+            applicants: applicants
+        });
+
+    });
+});
+router.get('/applicant/create', function(req, res, next) { //jshint ignore: line
+    res.render('admin/applicant_create');
+});
+
+router.post('/applicant/create', uploader.fields([
+    { name: 'attachments' },
+    { name: 'photos' }
+]), function(req, res, next) { //jshint ignore: line
+    var form = req.body;
+    var files = req.files;
+    if (files) {
+        // req.flash('warning', ['没有添加文件']);
+        // return res.redirect('/admin/applicant/create');
+        for (var file in files) {
+            form[file] = files[file][0].filename;
+        }
+    }
+    var applicant = new Applicant({
+        name: form.name,
+        idno: form.idno,
+        tel: form.tel,
+        attachments: form.attachments,
+        photos: form.photos
+    });
+    applicant.save(function(err, obj) {
+        if (err) {
+            req.flash('warning', ['保存档案时发生错误']);
+            return next(err);
+        }
+        if (!obj) {
+            req.flash('warning', ['档案保存失败']);
+            return res.redirect('/admin/applicant/create');
+        }
+        req.flash('warning', ['档案保存成功']);
+        return res.redirect('/admin/applicant');
+
+    });
+});
+
+//------------------------------------------------End __of APPLICANT
 
 
 module.exports = router;

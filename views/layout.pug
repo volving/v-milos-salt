@@ -30,6 +30,7 @@ html
           a.item#agentCreate(href="/agent/create") 新网点录入
           a.item#identify(href="/identify/pre") 录入纸纹信息
           a.item#admin(href="/admin") 控制台
+          //- a.item#admin(href="/verify") 比对
 
 
         if(user)
@@ -40,7 +41,7 @@ html
           a.item.floatright#signin(href="/login") 您尚未登录(点此登录)
           a.item.floatright#signup(href="/register") 注册
 
-    a(href="/" style="display: inline-block; position: absolute; right: 1em; bottom: 1em;").btn.btn-default
+    a(href="/" style="display: inline-block; position: fixed; right: 5em; bottom: 5em;").btn.btn-default
       i.glyphicon.glyphicon-home &nbsp;&nbsp;返回首页
     br
     br

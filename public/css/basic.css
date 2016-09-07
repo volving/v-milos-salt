@@ -6,6 +6,9 @@ ol,
 li {
   padding: none;
 }
+div {
+  text-overflow: ellipsis;
+}
 .clearfix::after {
   content: '';
   display: block;
