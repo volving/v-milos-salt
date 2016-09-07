@@ -12,7 +12,7 @@ block body
     br
 
   .container
-    form.form-horizontal(action="/register" role="form" method="POST")
+    form.form-horizontal(action="/register" role="form" method="POST" enctype="multipart/form-data")
       input(type="hidden" name="_csrf" value=csrfToken)
 
       +field('账户名', 'username', 'text', 'username', 'username', '', '请在此处输入手机号/邮箱/英文字母组合, 长度超过6个字符')
@@ -44,6 +44,7 @@ block body
         .col-md-3
           input.form-control#attachments(type="file" name="attachments" multiple="multiple")
 
+      +field('备注', 'text', 'remarks', 'remarks', '', '')
       +field('邀请码(管理员)', 'text', 'usertype', 'usertype', '', '')
 
       .form-group

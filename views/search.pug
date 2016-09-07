@@ -6,21 +6,21 @@ block body
       form.form-horizontal(action="/search" rol="form" method="GET")
         //- input(type="hidden" name="_csrf" value="#{csrfToken}")
         .col-sm-6.col-sm-offset-2.col-md-6.col-md-offset-2
-          input.form-control#searchInput(type="text" name="search")
+          input.form-control#searchInput(type="text" name="search" placeholder="请输入保真证书后几位, 例如 57ce***32e4517 的 2e4517, 位数越多越精确")
         .col-sm-2.col-md-2
           input.btn.btn-primary.form-control(type="submit" value="搜索")
     br
     br
 
-    if artworks && artworks.length > 0
+    if identitys && identitys.length > 0
       .row#results
         .col-xs-12.col-sm-6.col-sm-offset-2.card
-          for item in artworks
+          for item in identitys
             a(href="#")
               div(style="margin: .5em; padding: .5em; display: inline-block; float: left; width: 200px; height: 200px;box-shadow: 0 0 1px 0 grey;")
-                -var src='/uploads/'+ item._id
+                -var src='/uploads/'+item.sid.trim()
                 img(src=src, alt="")
                 p= item.title
-                p= item.artist.name
+                //- p= item.artist.name
                 p= item.category
                 p= item.times

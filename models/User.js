@@ -21,10 +21,10 @@ var userSchema = new Schema({
     email: String,
     mobile: String,
     idno: String,
-    attachment: String,
+    attachments: String,
     remarks: String,
     usertype: [String],
-    register_ts: {
+    regtimestamp: {
         type: Date,
         default: Date.now
     },

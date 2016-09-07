@@ -4,10 +4,10 @@ var Schema = mongoose.Schema;
 
 
 var verifySchema = new Schema({
-    applicants: [{
+    applicant: {
         type: Schema.Types.ObjectId,
         ref: 'Applicant'
-    }],
+    },
     records: [{
         type: Schema.Types.ObjectId,
         ref: 'Record'

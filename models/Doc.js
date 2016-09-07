@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var docSchema = new Schema({
     fullview: String,
     preview: String,
-    magifyview: String,
+    magnifyview: String,
     zoom: String,
     remarks: String,
     locator: {

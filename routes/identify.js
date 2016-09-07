@@ -1,9 +1,9 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
-var multer = require('multer');
 var mongoose = require('mongoose');
 
+var multer = require('multer');
 var uploader = multer({
     dest: './public/uploads'
 });
@@ -15,7 +15,7 @@ var Identify = require('../models/Identify'),
     Artist = require('../models/Artist'),
     Doc = require('../models/Doc');
 
-function getMongoId(str){
+function getMongoId(str) {
     return mongoose.Types.ObjectId(str);
 }
 
@@ -55,11 +55,26 @@ router.post('/pre', uploader.fields([
         name: req.body.name,
         tel: req.body.tel,
         idno: req.body.idno,
-        attachment: form.attachments,
+        attachments: form.attachments,
         photo: form.photo
     });
     var objs = {};
+
+
+
+
+
+    /**
+     * save applicant
+     * save artist & coartist
+     * save artwork
+     * save identify && add req.session.identify_id
+     * save identity && add req.session.identity_id
+     */
+    //------------------------------------------------Start of /pre process
+    // save applicant
     applicant.save().then(function(obj) {
+        // save artist & coartist
         objs.applicant = obj;
         if (req.body.artist) {
             var artist = new Artist({
@@ -83,10 +98,11 @@ router.post('/pre', uploader.fields([
         }
         return objs;
     }).then(function() {
+        // save artwork
         var artist_id = objs.artist && objs.artist._id || undefined,
             coartist_id = objs.coartist && objs.coartist._id || undefined;
-            console.log('artist_id:' + artist_id);
-            console.log('coartist_id:' + coartist_id);
+        console.log('artist_id:' + artist_id);
+        console.log('coartist_id:' + coartist_id);
         var artwork = new Artwork({
             title: req.body.title,
             artist: getMongoId(artist_id),
@@ -97,45 +113,71 @@ router.post('/pre', uploader.fields([
             onplatform: req.body.onplatform
         });
         return artwork.save().then(function(obj) {
-            if (obj) {
-                objs.artwork = obj;
+            if (!obj) {
+                req.flash('danger', ['信息保存失败']);
+                throw new Error('Artwork 保存失败');
             }
+            objs.artwork = obj;
             return objs;
         });
     }).then(function() {
+        // save identify && add req.session.identify_id
         var identify = new Identify({
             applicant: objs.applicant._id,
             artwork: objs.artwork._id,
             docs: []
         });
         return identify.save().then(function(obj) {
-            if (obj) {
-                objs.identify = obj;
-                var _id = obj._id;
-                req.session.identify_id = _id;
+            if (!obj) {
+                req.flash('danger', ['信息保存失败']);
+                throw new Error('Identify 保存失败');
             }
+
+            objs.identify = obj;
+            var _id = obj._id;
+            req.session.identify_id = _id;
+
             return objs;
         });
     }).then(function() {
+        // save identity && add req.session.identity_id
+        var sid = new mongoose.Types.ObjectId();
+
+        var title = objs.artworkd && objs.artworkd.title || '',
+            artist = objs.artwork && objs.artwork.artist || undefined,
+            artwork = objs.artwork && objs.artwork._id || undefined,
+            identify = objs.identify && objs.identify._id || undefined,
+            identifys = [];
+        if (identity) {
+            identifys.push(identify);
+        }
         var identity = new Identity({
-            artwork: objs.artwork._id,
-            identifys: [objs._id],
+            sid: sid,
+            title: title,
+            artist: artist,
+            artwork: artwork,
+            identifys: identifys,
             verifys: [],
             availability: 'creating'
         });
         return identity.save().then(function(obj) {
-            if (obj) {
-                var _id = obj._id;
-                if (req.user) {
-                    req.user.identity_id = _id;
-                }
-                res.redirect('/identify/record');
+            if (!obj) {
+                req.flash('danger', ['信息保存失败']);
+                throw new Error('Identity 保存失败');
             }
+            var _id = obj._id;
+            if (req.session) {
+                req.session.identity_id = _id;
+            }
+            res.redirect('/identify/record');
         });
     }).catch(function(err) {
+        req.flash('danger', ['发生了其他错误']);
         return next(err);
     });
+    //------------------------------------------------End __of /pre process
 });
+
 
 router.get('/record', function(req, res, next) { //jshint ignore: line
     var identify_id = req.session.identify_id;
@@ -143,19 +185,18 @@ router.get('/record', function(req, res, next) { //jshint ignore: line
         req.flash('warning', ['请按照流程进行操作']);
         return res.redirect('/identify/pre');
     }
-    Identify.findOne({ _id: mongoose.Types.ObjectId(identify_id) }).populate('docs').exec().then(function(obj) {
-        if (obj) {
-            var docs = obj.docs;
-            res.render('./identify/record', {
-                // csrfToken: req.csrfToken(),
-                identify_id: identify_id,
-                docs: docs
-            });
-        } else {
+    Identify.findOne({ _id: getMongoId(identify_id) }).populate('docs').exec().then(function(obj) {
+        if (!obj) {
             req.flash('warning', ['未能找到对应的记录']);
-            return res.redirect('/identify/pre');
+            res.redirect('/identify/pre');
         }
-    }).catch(function(err){
+        var docs = obj.docs;
+        res.render('./identify/record', {
+            // csrfToken: req.csrfToken(),
+            identify_id: identify_id,
+            docs: docs
+        });
+    }).catch(function(err) {
         return next(err);
     });
 });
@@ -188,26 +229,36 @@ router.post('/record', uploader.fields([
         //     return;
         // }
         // console.log(obj, identify_id);
+        if (err) {
+            req.flash('warning', ['保存时发生错误']);
+            return next(err);
+        }
+        if (!obj) {
+            req.flash('warning', ['该纸纹记录未能保存成功']);
+            return req.redirect('/identify/record');
+        }
         if (obj && identify_id) {
-            Identify.findOne({ _id: getMongoId(identify_id)}).exec(function(err, idf) {
-                if (idf) {
-                    idf.docs.push(obj._id);
-                    // var docs = idf.docs || [];
-                    //     docs.push(obj._id);
-                    // idf.docs = docs;
-                    // obj.docs = [obj._id];
-                    idf.save(function(err, idtf){
-                        if (err) {
-                            return next(err);
-                        }
-                        if (!idtf) {
-                            return next();
-                        }
-                        delete req.session.identify_id;
-                        return res.redirect('/identify/post');
-                    });
-                    return idf;
+            Identify.findOne({ _id: getMongoId(identify_id) }).exec(function(err, idf) {
+                if (err) {
+                    return next(err);
                 }
+                if (!idf) {
+                    req.flash('warning', ['未能找到对应的艺术品']);
+                    return req.redirect('/identify/record');
+                }
+                idf.docs.push(obj._id);
+                idf.save(function(err, idtf) {
+                    if (err) {
+                        return next(err);
+                    }
+                    if (!idtf) {
+                        req.flash('warning', ['未能将该纸纹记录添加到对应艺术品']);
+                        return req.redirect('/identify/record');
+                    }
+                    delete req.session.identify_id;
+                    return res.redirect('/identify/post');
+                });
+                return idf;
             });
         }
     });
@@ -228,6 +279,10 @@ router.post('/upload', uploader.any(), function(req, res, next) { //jshint ignor
     res.json({
         filename: filename
     });
+});
+
+router.get('/manage', function(req, res, next) { //jshint ignore: line
+
 });
 
 module.exports = router;

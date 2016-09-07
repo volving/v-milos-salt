@@ -5,7 +5,11 @@ var router = express.Router();
 var User = require('../models/User');
 var passport = require('passport');
 
-var Artwork = require('../models/Artwork');
+var multer = require('multer');
+var uploader = multer({
+    dest: './public/uploads'
+});
+var Identity = require('../models/Identity');
 // router.use(function(req, res, next){
 //     next();
 // });
@@ -36,9 +40,20 @@ var getTypes = function(str) {
     return types;
 };
 
-router.post('/register', function(req, res, next) { //jshint ignore: line
+router.post('/register', uploader.fields([
+    { name: 'attachments', maxCount: 1 },
+]), function(req, res, next) { //jshint ignore: line
+
     var username = req.body.username || '';
     if (username.length > 3) {
+        var form = req.body;
+        console.log(files);
+        console.log(form);
+        var files = req.files;
+        for (var file in files) {
+            form[file] = files[file][0].filename;
+        }
+        console.log(form);
         User.findOne({ username: username }, function(err, user) {
             if (err) {
                 res.status = 500;
@@ -50,17 +65,17 @@ router.post('/register', function(req, res, next) { //jshint ignore: line
             } else {
                 var newUser = new User({
                     username: username,
-                    password: req.body.password || 'oooooo',
-                    nickname: req.body.nickname || '',
-                    fullname: req.body.fullname || '',
-                    gender: req.body.gender || '',
-                    region: req.body.region || '',
-                    email: req.body.email || '',
-                    mobile: req.body.mobile || '',
-                    idno: req.body.idno || '',
-                    attachment: req.body.attachment || '',
-                    remarks: req.body.remarks || '',
-                    usertype: getTypes(req.body.usertype)
+                    password: form.password || 'oooooo',
+                    nickname: form.nickname || '',
+                    fullname: form.fullname || '',
+                    gender: form.gender || '',
+                    region: form.region || '',
+                    email: form.email || '',
+                    mobile: form.mobile || '',
+                    idno: form.idno || '',
+                    attachments: form.attachment || '',
+                    remarks: form.remarks || '',
+                    usertype: getTypes(form.usertype)
                 });
 
                 newUser.save(function(err, user) { //jshint ignore: line
@@ -172,7 +187,7 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
             if (err) {
                 return next(err);
             }
-            req.flash('success', ['欢迎登录!']);
+            req.flash('success', ['欢迎, 您已登录']);
             res.redirect('/');
         });
     })(req, res, next);
@@ -180,31 +195,44 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
 
 router.get('/logout', function(req, res) { //jshint ignore: line
     req.logout();
+    req.flash('success', ['您已退出']);
     res.redirect('/');
 });
 
 
 router.get('/search', function(req, res, next) { //jshint ignore: line
-    // var search = req.query.search;
+    var search = req.query.search,
+        condition = {};
+    if (search) {
+        var reg = new RegExp(search, 'i');
+        condition = {sid: {$regex: reg}};
+    }
 
-    // if (!search) {
+    // Artwork.find({}).populate('artist coartist').exec(function(err, list) {
+    //     if (err) {
+    //         return next(err);
+    //     }
+    //     if (!list) {
+    //         return next();
+    //     }
+    //     console.log(list);
+    //     return res.render('./search', {
+    //         artworks: list
+    //     });
+    // });
 
-    // }
-
-    Artwork.find({}).populate('artist coartist').exec(function(err, list) {
+    Identity.find(condition).populate('artwork').exec(function(err, list) {
         if (err) {
             return next(err);
         }
         if (!list) {
-            return next();
+            req.flash('info', ['没有查询到相应记录']);
+            return res.render('./search');
         }
-        console.log(list);
         return res.render('./search', {
-            artworks: list
+            identitys: list
         });
     });
-
-    // return res.render('./search', {});
 });
 
 

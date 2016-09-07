@@ -6,7 +6,7 @@ var applicantSchema = new Schema({
     name: String,
     tel: String,
     idno: String,
-    attachment: [String],
+    attachments: [String],
     photo: [String]
 });
 
