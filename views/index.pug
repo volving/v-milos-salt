@@ -13,13 +13,12 @@ block body
         .form-group
           .row
             .col-xs-10.col-sm-8.col-sm-offset-2.col-md-5.col-md-offset-3
-              p 请输入作品名称或指纹编号进行检索
-          .row
-            .col-xs-10.col-sm-8.col-sm-offset-2.col-md-5.col-md-offset-3
-              input.form-control#searchInput(type="text" name="search")
-              //- placeholder="请输入作品名称或指纹编号进行检索"
+              input.form-control#searchInput(type="text" name="search" placeholder="请输入作品名称或指纹编号进行检索")
             .col-xs-2.col-sm-1.col-xs-3
               button.btn.btn-primary(type="submit") 搜索
+          .row
+            a.btn.btn-default 艺术家注册
+            a(href="/agent").btn.btn-default 网点查询
 
     if(user && user.usertype.indexOf('admin') > -1)
       #actions

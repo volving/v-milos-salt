@@ -4,10 +4,15 @@ var Schema = mongoose.Schema;
 
 var applicantSchema = new Schema({
     name: String,
-    tel: String,
     idno: String,
+    tel: String,
+    email: String,
     attachments: [String],
-    photo: [String]
+    photos: [String],
+    ts: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 module.exports = mongoose.model('Applicant', applicantSchema);

@@ -11,6 +11,10 @@ var docSchema = new Schema({
     locator: {
         type: String,
         default: ''
+    },
+    ts: {
+        type: Date,
+        default: Date.now
     }
 
 });

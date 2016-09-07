@@ -15,7 +15,12 @@ var artworkSchema = new Schema({
     category: String,
     times: String,
     size: String,
-    onplatform: Boolean
+    onplatform: Boolean,
+    url: String,
+    ts: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 module.exports = mongoose.model('Artwork', artworkSchema);

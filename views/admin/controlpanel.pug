@@ -1,0 +1,15 @@
+extends ../layout
+
+block body
+  .container#admin
+    h1.text-center 这里是管理员控制台
+    .row
+      .col-md-4.col-md-offset-4
+        .row
+          br
+          a(href="/admin/identity").col-md-5.btn.btn-primary 管理纸纹
+
+          a.col-md-5.col-md-offset-2.btn.btn-primary.disabled 管理操作员
+        .row
+          br
+          a.col-md-5.btn.btn-primary.disabled 管理申请者

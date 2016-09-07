@@ -7,14 +7,14 @@ var identifySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Applicant'
     },
-    artwork: {
-        type: Schema.Types.ObjectId,
-        ref: 'Artwork'
-    },
     docs: [{
         type: Schema.Types.ObjectId,
         ref: 'Doc'
-    }]
+    }],
+    ts: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 module.exports = mongoose.model('Identify', identifySchema);

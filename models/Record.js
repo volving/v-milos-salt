@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var recordSchema = new Schema({
     details: [String],
-    timestamp: {
+    ts: {
         type: Date,
         default: Date.now
     }

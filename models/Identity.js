@@ -5,12 +5,8 @@ var Schema = mongoose.Schema;
 
 var identitySchema = new Schema({
     sid: String,
-    title: String,
-    photo: String,
-    artist: {
-        type: Schema.Types.ObjectId,
-        ref: 'Artist'
-    },
+
+    status: String, //creating/'', processing, available, disabled
     artwork: {
         type: Schema.Types.ObjectId,
         ref: 'Artwork'
@@ -23,7 +19,15 @@ var identitySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Verify'
     }],
-    availability: String //creating/'', processing, available, disabled
+    creater: {
+        type: Schema.Types.ObjectId,
+        ref: 'Applicant',
+        default: undefined
+    },
+    ts: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 

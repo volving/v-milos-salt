@@ -11,7 +11,11 @@ var verifySchema = new Schema({
     records: [{
         type: Schema.Types.ObjectId,
         ref: 'Record'
-    }]
+    }],
+    ts: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 
