@@ -1,0 +1,37 @@
+extends _layout
+include ../utils/mixins
+
+block buttons
+  a.btn.btn-success(href="/admin/artwork") 返回管理页
+block content
+  br
+  form.form-horizontal(id="artworkform" action="/admin/artwork/create" role="form" method="POST")
+    input(type="hidden" name="_csrf" value=csrfToken)
+    +field('标题', 'title', 'text', 'title', 'title', 'essential')
+    .row
+      .form-group
+        label.control-label(for="artist") 艺术家
+        select.form-control(name="artist" form="artworkform")#artist
+          option(value='') ---
+          for artist in artists
+            option(value=artist._id)= artist.name
+    .row
+      .form-group
+        label.control-label(for="coartist") 协作艺术家
+        select.form-control(name="coartist" form="artworkform")#coartist
+          option(value='') ---
+          for artist in artists
+            option(value=artist._id)= artist.name
+    +field('大类', 'category', 'text', 'category', 'category', '')
+    +field('时代', 'times', 'text', 'times', 'times', '')
+    +field('尺寸', 'size', 'text', 'size', 'size', '')
+    +field('备注', 'remarks', 'text', 'remarks', 'remarks', '')
+    .row
+      .form-group
+        input(id="onplatform", type="checkbox", name="onplatform")
+        label.control-label(for="onplatform") &nbsp;&nbsp;本艺术家档案在"三真艺术"平台有收录
+    +field('URL', 'url', 'text', 'url', 'url', '')
+    .row
+      .form-group
+        .col-xs-12.col-md-4.col-md-push-4
+          button#submit.btn.btn-primary.col-xs-12(type="submit") 提交

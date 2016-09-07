@@ -15,6 +15,7 @@ var artworkSchema = new Schema({
     category: String,
     times: String,
     size: String,
+    remarks: String,
     onplatform: Boolean,
     url: String,
     ts: {

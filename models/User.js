@@ -24,7 +24,7 @@ var userSchema = new Schema({
     attachments: String,
     remarks: String,
     usertype: [String],
-    regtimestamp: {
+    ts: {
         type: Date,
         default: Date.now
     },

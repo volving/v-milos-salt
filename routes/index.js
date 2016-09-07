@@ -41,19 +41,26 @@ var getTypes = function(str) {
 };
 
 router.post('/register', uploader.fields([
-    { name: 'attachments', maxCount: 1 },
+    { name: 'attachments' }, //, maxCount: 5
 ]), function(req, res, next) { //jshint ignore: line
 
     var username = req.body.username || '';
     if (username.length > 3) {
         var form = req.body;
-        console.log(files);
-        console.log(form);
         var files = req.files;
         for (var file in files) {
-            form[file] = files[file][0].filename;
+            var arr = [];
+            var field = files[file];
+            if (field) {
+                for (var i = 0, len = field.length; i < len; i++) {
+                    var item = field[i];
+                    if (item && item.filename) {
+                        arr.push(item.filename);
+                    }
+                }
+            }
+            form[file] = arr;
         }
-        console.log(form);
         User.findOne({ username: username }, function(err, user) {
             if (err) {
                 res.status = 500;
@@ -61,7 +68,7 @@ router.post('/register', uploader.fields([
             }
             if (user) {
                 req.flash('warning', ['该用户名已经存在!']);
-                res.redirect('/register');
+                return res.redirect('/register');
             } else {
                 var newUser = new User({
                     username: username,
@@ -73,7 +80,7 @@ router.post('/register', uploader.fields([
                     email: form.email || '',
                     mobile: form.mobile || '',
                     idno: form.idno || '',
-                    attachments: form.attachment || '',
+                    attachments: form.attachments || '',
                     remarks: form.remarks || '',
                     usertype: getTypes(form.usertype)
                 });
@@ -82,7 +89,7 @@ router.post('/register', uploader.fields([
                     if (err) {
                         next(err);
                     }
-                    res.render('info', {
+                    return res.render('info', {
                         title: '用户信息已经创建!',
                         content: '您的审核已经提交, 我们尽快审核, 结果会发送到您的邮箱, 请您注意查收!'
                     });
@@ -173,7 +180,7 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
     }
     if (warning.length > 0) {
         req.flash('warning', warning);
-        res.redirect('/login');
+        return res.redirect('/login');
     }
     passport.authenticate('login', function(err, user, info) {
         if (err) {
@@ -188,7 +195,7 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
                 return next(err);
             }
             req.flash('success', ['欢迎, 您已登录']);
-            res.redirect('/');
+            return res.redirect('/');
         });
     })(req, res, next);
 });
@@ -205,7 +212,7 @@ router.get('/search', function(req, res, next) { //jshint ignore: line
         condition = {};
     if (search) {
         var reg = new RegExp(search, 'i');
-        condition = {sid: {$regex: reg}};
+        condition = { sid: { $regex: reg } };
     }
 
     // Artwork.find({}).populate('artist coartist').exec(function(err, list) {

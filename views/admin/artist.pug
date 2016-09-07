@@ -1,0 +1,42 @@
+extends _layout
+
+block buttons
+  a(href="/admin/artist/create").btn.btn-success 新建艺术家档案
+  //- | &nbsp;
+
+block content
+  br
+  if artists && artists.length > 0
+    each item in artists
+      .panel.panel-default
+        .panel-heading
+          a(href="#")
+            i.glyphicon.glyphicon-pencil &nbsp;
+            = item.name
+
+        .panel-body
+          .row
+            .col-xm-3.col-md-1
+              p.bg-info 职务
+            .col-xm-3.col-md-2
+              p= item.title
+            .col-xm-3.col-md-1
+              p.bg-info 字号
+            .col-xm-3.col-md-2
+              p= item.called
+            .col-xm-3.col-md-1
+              p.bg-info 诞辰
+            .col-xm-3.col-md-2
+              p= item.dob
+            .col-xm-3.col-md-1
+              p.bg-info 籍贯
+            .col-xm-3.col-md-2
+              p= item.region
+            .col-xm-12.col-md-12
+              p.bg-info 备注
+            .col-xm-12.col-md-12
+              p= item.remarks
+            .col-xm-12.col-md-12
+              p.bg-info 三真链接
+            .col-xm-12.col-md-12
+              p= item.url

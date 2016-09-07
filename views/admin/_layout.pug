@@ -1,0 +1,13 @@
+extends ../layout
+
+block body
+  .container
+    h1.text-center= title
+    //- 管理艺术品纸纹
+    .row
+      a(href="/admin").btn.btn-primary
+        i.glyphicon.glyphicon-arrow-left &nbsp;
+        | 返回控制台
+      | &nbsp;
+      block buttons
+    block content
