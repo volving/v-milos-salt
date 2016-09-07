@@ -5,6 +5,13 @@ var router = express.Router();
 var Identity = require('../models/Identity');
 var Artist = require('../models/Artist');
 var Artwork = require('../models/Artwork');
+var Doc = require('../models/Doc');
+
+var multer = require('multer');
+var uploader = multer({
+    dest: './public/uploads'
+});
+
 
 router.use(function(req, res, next) { //jshint ignore: line
     if (!(req.user && req.user.usertype.indexOf('admin') > -1)) {
@@ -29,7 +36,7 @@ router.get('/identity', function(req, res, next) { //jshint ignore: line
             return res.render('./admin/identity');
         }
         return res.render('./admin/identity', {
-            title: '管理艺术品纸纹档案',
+            title: '品籍档案',
             identitys: idts
         });
     });
@@ -45,17 +52,17 @@ router.get('/identity/create', function(req, res, next) { //jshint ignore: line
 router.get('/artist', function(req, res, next) { //jshint ignore: line
     Artist.find({}).exec(function(err, artists) {
         if (err) {
-            req.flash('warning', ['查询艺术家信息过程中出错']);
+            req.flash('warning', ['查询艺术家档案过程中出错']);
             return next(err);
         }
         if (!artists) {
-            req.flash('warning', ['保存艺术家信息过程中出错']);
-            return res.render('admin/artist',{
-                title: '管理艺术家档案'
+            req.flash('warning', ['查询艺术家档案过程中出错']);
+            return res.render('admin/artist', {
+                title: '艺术家档案'
             });
         }
         return res.render('admin/artist', {
-            title: '管理艺术家档案',
+            title: '艺术家档案',
             artists: artists
         });
     });
@@ -63,7 +70,7 @@ router.get('/artist', function(req, res, next) { //jshint ignore: line
 
 
 router.get('/artist/create', function(req, res, next) { //jshint ignore: line
-    return res.render('admin/artist_create',{
+    return res.render('admin/artist_create', {
         title: '新建艺术家档案',
     });
 });
@@ -87,11 +94,11 @@ router.post('/artist/create', function(req, res, next) { //jshint ignore: line
     });
     artist.save(function(err, artist) {
         if (err) {
-            req.flash('warning', ['保存艺术家信息过程中出错']);
+            req.flash('warning', ['保存艺术家档案过程中出错']);
             return next(err);
         }
         if (!artist) {
-            req.flash('warning', ['未能保存成功']);
+            req.flash('warning', ['保存艺术家档案失败']);
         }
         req.flash('success', ['保存成功']);
         return res.redirect('/admin/artist/create');
@@ -102,27 +109,26 @@ router.post('/artist/create', function(req, res, next) { //jshint ignore: line
 
 //------------------------------------------------Start of ARTWORK
 router.get('/artwork', function(req, res, next) { //jshint ignore: line
-    Artwork.find({}).populate('artist coartist').exec(function(err, artworks){
+    Artwork.find({}).populate('artist coartist').exec(function(err, artworks) {
         if (err) {
-            req.flash('warning', ['查询艺术品信息过程中出错']);
+            req.flash('warning', ['查询艺术品档案过程中出错']);
             return next(err);
         }
         if (!artworks) {
-            req.flash('warning', ['保存艺术品信息过程中出错']);
-            return res.render('admin/artwork',{
-                title: '管理艺术品'
+            req.flash('warning', ['未能查询到艺术品档案']);
+            return res.render('admin/artwork', {
+                title: '艺术品档案'
             });
         }
-        console.log(artworks);
         return res.render('admin/artwork', {
-            title: '管理艺术品',
+            title: '艺术品档案',
             artworks: artworks
         });
 
     });
 });
 router.get('/artwork/create', function(req, res, next) { //jshint ignore: line
-    Artist.find({}).exec(function(err, artists){
+    Artist.find({}).exec(function(err, artists) {
         if (err) {
             req.flash('warning', ['查询艺术家档案时出错']);
             return next(err);
@@ -131,7 +137,7 @@ router.get('/artwork/create', function(req, res, next) { //jshint ignore: line
             req.flash('warning', ['尚无艺术家档案, 请先创建']);
             return res.redirect('/admin/artist');
         }
-        return res.render('admin/artwork_create',{
+        return res.render('admin/artwork_create', {
             title: '新建艺术品档案',
             artists: artists
         });
@@ -161,7 +167,7 @@ router.post('/artwork/create', function(req, res, next) { //jshint ignore: line
     });
     artwork.save(function(err, artwork) {
         if (err) {
-            req.flash('warning', ['保存艺术品信息过程中出错']);
+            req.flash('warning', ['保存艺术品档案过程中出错']);
             return next(err);
         }
         if (!artwork) {
@@ -171,9 +177,70 @@ router.post('/artwork/create', function(req, res, next) { //jshint ignore: line
         return res.redirect('/admin/artwork/create');
     });
 });
-
-
 //------------------------------------------------End __of ARTWORK
+
+//------------------------------------------------Start of DOC
+router.get('/doc', function(req, res, next) { //jshint ignore: line
+    Doc.find({}).exec(function(err, docs) {
+        if (err) {
+            req.flash('warning', ['查询纸纹档案过程中出错']);
+            return next(err);
+        }
+        if (!docs) {
+            req.flash('warning', ['未能查询到纸纹档案']);
+            return res.render('admin/doc', {
+                title: '纸纹档案'
+            });
+        }
+        return res.render('admin/doc', {
+            title: '纸纹档案',
+            docs: docs
+        });
+
+    });
+});
+router.get('/doc/create', function(req, res, next) { //jshint ignore: line
+    res.render('admin/doc_create');
+});
+
+router.post('/doc/create', uploader.fields([
+    { name: 'fullview', maxCount: 1 },
+    { name: 'preview', maxCount: 1 },
+    { name: 'magnifyview', maxCount: 1 }
+]), function(req, res, next) { //jshint ignore: line
+    var form = req.body;
+    var files = req.files;
+    if (!files) {
+        req.flash('warning', ['没有添加文件']);
+        return res.redirect('/admin/doc/create');
+    }
+    for(var file in files){
+        form[file] = files[file][0].filename;
+    }
+
+    var doc = new Doc({
+        fullview: form.fullview,
+        preview: form.preview,
+        magnifyview: form.magnifyview,
+        zoom: form.zoom,
+        remarks: form.remarks
+    });
+    doc.save(function(err, obj){
+        if (err) {
+            req.flash('warning', ['保存纸纹档案时发生错误']);
+            return next(err);
+        }
+        if (!obj) {
+            req.flash('warning', ['纸纹档案保存失败']);
+            return res.redirect('/admin/doc/create');
+        }
+        req.flash('warning', ['纸纹档案保存成功']);
+        return res.redirect('/admin/doc');
+
+    });
+});
+
+//------------------------------------------------End __of DOC
 
 
 module.exports = router;

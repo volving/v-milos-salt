@@ -4,17 +4,22 @@ block body
   .container#admin
     h1.text-center 这里是管理员控制台
     .row
-      .col-md-4.col-md-offset-4
+      .col-xs-12.col-md-4.col-md-offset-4
         .row
           br
-          a(href="/admin/artist").col-md-5.btn.btn-primary 管理艺术家档案
-          a(href="/admin/artwork").col-md-5.col-md-offset-2.btn.btn-primary 管理艺术品档案
+          a(href="/admin/artist").col-xs-4.col-xs-offset-1.col-md-4.col-md-offset-1.btn.btn-primary 艺术家档案
+          a(href="/admin/artwork").col-xs-4.col-xs-offset-2.col-md-4.col-md-offset-2.btn.btn-primary.btn.btn-primary 艺术品档案
 
         .row
           br
-          a(href="/admin/identity").col-md-5.btn.btn-primary 管理纸纹档案
-          a.col-md-5.col-md-offset-2.btn.btn-primary.disabled 管理操作员档案
+          a(href="/admin/identity").col-xs-4.col-xs-offset-1.col-md-4.col-md-offset-1.btn.btn-primary 品籍档案
+          a.col-xs-4.col-xs-offset-2.btn.btn-primary.col-md-4.col-md-offset-2.btn.btn-primary.disabled 操作员档案
 
         .row
           br
-          a.col-md-5.btn.btn-primary.disabled 管理申请者档案
+          a.col-xs-4.col-xs-offset-1.col-md-4.col-md-offset-1.btn.btn-primary.disabled 申请者档案
+          a.col-xs-4.col-xs-offset-2.btn.btn-primary.col-md-4.col-md-offset-2.btn.btn-primary.disabled 纸纹档案
+        .row
+          br
+          a.col-xs-4.col-xs-offset-1.col-md-4.col-md-offset-1.btn.btn-primary.disabled 申请者档案
+          a(href="/admin/doc").col-xs-4.col-xs-offset-2.btn.btn-primary.col-md-4.col-md-offset-2.btn.btn-primary 纸纹档案

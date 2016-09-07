@@ -1,0 +1,45 @@
+extends _layout
+
+block buttons
+  a(href="/admin/doc/create").btn.btn-success 新建纸纹档案
+  //- | &nbsp;
+
+block content
+  br
+  if docs && docs.length > 0
+    each item in docs
+      .panel.panel-default
+        .panel-heading
+          a(href="#")
+            i.glyphicon.glyphicon-pencil &nbsp;
+            = item._id
+        .panel-body
+          .row
+            .col-xs-6.col-md-6
+              p.bg-info 全景图
+            .col-xs-6.col-md-6
+              p.bg-info 预览图
+            .col-xs-6.col-md-6
+              if item.fullview
+                -var fullview = '/uploads/' + item.fullview
+                img(src=fullview, alt="").img-responsive
+              else
+                | 不存在
+            .col-xs-6.col-md-6
+              if item.preview
+                -var preview = '/uploads/' + item.preview
+                img(src=preview, alt="").img-responsive
+              else
+                | 不存在
+
+            if item.magnifyview
+              .col-xs-12.col-md-12
+                p.bg-info 纸纹图(放大倍数: #{item.zoom})
+              .col-xs-12.col-md-12
+                -var magnifyview = '/uploads/' + item.magnifyview
+                img(src=magnifyview, alt="").img-responsive
+
+            .col-xs-12.col-md-12
+              p.bg-info 备注
+            .col-xs-12.col-md-12
+              p= item.remarks

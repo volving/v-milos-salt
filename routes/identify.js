@@ -220,7 +220,7 @@ router.post('/record', uploader.fields([
         preview: form.preview,
         magnifyview: form.magnifyview,
         zoom: form.zoom,
-        remarks: form.zoom
+        remarks: form.remarks
     });
     doc.save(function(err, obj) {
         var identify_id = req.session.identify_id;
