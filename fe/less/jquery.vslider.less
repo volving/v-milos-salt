@@ -1,0 +1,167 @@
+
+.vslider {
+    display: block;
+    width: 100%;
+    height: 400px;
+    margin: 0 auto;
+    position: relative;
+    clear: right;
+    -webkit-box-shadow: 0 0 2px 2px rgba(128, 128, 128, 0.6);
+    box-shadow: 0 0 2px 2px rgba(128, 128, 128, 0.6);
+    .slideContainer {
+        overflow: hidden;
+        display: block;
+        position: relative;
+        .slides {
+            display: block;
+            position: absolute;
+            overflow: hidden;
+            .slide {
+                display: inline-block;
+                position: relative;
+                float: left;
+                .img{
+                    -webkit-background-size: contain;
+                         -o-background-size: contain;
+                            background-size: contain;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                }
+            }
+        }
+        .navs {
+            display: block;
+            position: absolute;
+            height: 5em;
+            width: 100%;
+            top: 50%;
+            margin-top: -2.5em;
+            z-index: 1;
+            background-color: none;
+            line-height: 5em;
+            font-size: 2em;
+            pointer-events: none;
+            a {
+                text-decoration: none;
+            }
+            .prev,
+            .next {
+                pointer-events: all;
+                display: inline-block;
+                width: 2em;
+                color: rgba(128, 128, 128, 0.2);
+                background-color: rgba(64, 64, 64, 0.1);
+                text-align: center;
+                font-weight: 800;
+                -webkit-transition: all 0.5s linear;
+                -moz-transition: all 0.5s linear;
+                -ms-transition: all 0.5s linear;
+                -o-transition: all 0.5s linear;
+                transition: all 0.5s linear;
+                &:hover {
+                    color: rgba(255, 255, 255, 0.7);
+                    background-color: rgba(0, 0, 0, 0.4);
+                    -webkit-transition: all 0.5s linear;
+                    -moz-transition: all 0.5s linear;
+                    -ms-transition: all 0.5s linear;
+                    -o-transition: all 0.5s linear;
+                    transition: all 0.5s linear;
+                }
+            }
+            .prev {
+                float: left;
+                -webkit-border-top-right-radius: 5px;
+                border-top-right-radius: 5px;
+                -webkit-border-bottom-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+            .next {
+                float: right;
+                -webkit-border-top-left-radius: 5px;
+                border-top-left-radius: 5px;
+                -webkit-border-bottom-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+            }
+        }
+        &:hover {
+            .navs {
+                visibility: visible;
+            }
+        }
+        .indicators {
+            display: block;
+            position: absolute;
+            z-index: 2;
+            height: 1em;
+            width: 100%;
+            bottom: 1em;
+            text-align: center;
+            .indicator {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                opacity: 0.75;
+                display: inline-block;
+                border: 2px solid #222;
+                background-color: #CCC;
+                margin: 0.2em;
+                width: 15px;
+                height: 15px;
+                -webkit-border-radius: 50%;
+                border-radius: 50%;
+                -webkit-transition: all 0.3s linear;
+                -moz-transition: all 0.3s linear;
+                -ms-transition: all 0.3s linear;
+                -o-transition: all 0.3s linear;
+                transition: all 0.3s linear;
+                &:hover {
+                    border: 2px solid #CCC;
+                    background-color: #fc673d;
+                    -webkit-transition: all 0.3s linear;
+                    -moz-transition: all 0.3s linear;
+                    -ms-transition: all 0.3s linear;
+                    -o-transition: all 0.3s linear;
+                    transition: all 0.3s linear;
+                }
+            }
+            .active {
+                border: 2px solid #CCC;
+                background-color: #fc673d;
+                -webkit-transition: all 0.3s linear;
+                -moz-transition: all 0.3s linear;
+                -ms-transition: all 0.3s linear;
+                -o-transition: all 0.3s linear;
+                transition: all 0.3s linear;
+            }
+        }
+    }
+    .thumbnails {
+        display: block;
+        height: 100px;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        .thumbnail {
+            display: inline-block;
+            float: left;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            margin: 2px;
+            margin-top: 10px;
+            img {
+                // width: 100px;
+                float: left;
+                opacity: 0.6;
+            }
+            &.active {
+                img {
+                    -webkit-box-shadow: 0 0 2px 2px rgba(64, 64, 64, 0.9);
+                    box-shadow: 0 0 2px 2px rgba(64, 64, 64, 0.9);
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

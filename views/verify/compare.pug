@@ -1,0 +1,37 @@
+extends ../layout
+include ../utils/mixins
+
+block head
+  link(rel="stylesheet", href="/css/lightslider.css")
+block body
+  #verify.container
+    if docs
+      -var len=docs.length
+      .row
+        .col-md-6.col-md-offset-3
+          form.form-vertical#inputs
+            input.form-control(type="file" id="fileInput" name="fileInput")
+      br
+      .row
+        .col-md-6
+          ul#vertical
+            each doc in docs
+              if doc.fullview
+                -var fullview = "/uploads/" + doc.fullview
+                li(data-thumb=fullview)
+                  img(src=fullview, alt="" style="width: 100%;")
+              if doc.preview
+                -var preview = "/uploads/" + doc.preview
+                li(data-thumb=preview)
+                  img(src=preview, alt="" style="width: 100%;")
+              if doc.magnifyview
+                -var magnifyview = "/uploads/" + doc.magnifyview
+                li(data-thumb=magnifyview)
+                  img(src=magnifyview, alt="" style="width: 100%;")
+        .col-md-6
+          div#canvas(style="box-shadow: 0 0 1px 1px grey; width: 500px; height: 500px; background-position: center center; background-size: contain" )
+
+
+block scripts
+  script(src="/js/lightslider.js")
+  script(src="/js/runslider.js")

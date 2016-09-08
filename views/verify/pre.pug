@@ -3,8 +3,9 @@ include ../utils/mixins
 
 block body
   #verify.container
-    form.form-horizontal(action="/verify/pre", method="POST",  enctype="multipart/form-data")
+    form.form-horizontal(action="/verify/compare/pre", method="POST",  enctype="multipart/form-data")
       input(type="hidden" name="_csrf" value=csrfToken)
+      input(type="hidden" name="iid" value=identify_id)
       .row
         hr
         ul
