@@ -2,11 +2,7 @@ public/uploads/*
 
 conf/secret.js
 ###Node###
-
 bower_components
-# Logs
-logs
-*.log
 
 # Runtime data
 pids
@@ -81,39 +77,6 @@ atlassian-ide-plugin.xml
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 
-
-###Eclipse###
-
-*.pydevproject
-.metadata
-.gradle
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.settings/
-.loadpath
-
-# External tool builders
-.externalToolBuilders/
-
-# Locally stored "Eclipse launch configurations"
-*.launch
-
-# CDT-specific
-.cproject
-
-# PDT-specific
-.buildpath
-
-# sbteclipse plugin
-.target
-
-# TeXlipse plugin
-.texlipse
 
 
 ###C###
@@ -200,41 +163,3 @@ sftp-config.json
 Session.vim
 .netrwhist
 *~
-
-
-###Ruby###
-
-*.gem
-*.rbc
-/.config
-/coverage/
-/InstalledFiles
-/pkg/
-/spec/reports/
-/test/tmp/
-/test/version_tmp/
-/tmp/
-
-## Specific to RubyMotion:
-.dat*
-.repl_history
-build/
-
-## Documentation cache and generated files:
-/.yardoc/
-/_yardoc/
-/doc/
-/rdoc/
-
-## Environment normalisation:
-/.bundle/
-/lib/bundler/man/
-
-# for a library or gem, you might want to ignore these files since the code is
-# intended to run in multiple environments; otherwise, check them in:
-# Gemfile.lock
-# .ruby-version
-# .ruby-gemset
-
-# unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
-.rvmrc
