@@ -1,0 +1,22 @@
+{
+  "name": "salt",
+  "description": "",
+  "main": "",
+  "authors": [
+    "volving <volving@icloud.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.0"
+  }
+}
