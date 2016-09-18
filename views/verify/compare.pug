@@ -7,10 +7,6 @@ block body
   #verify.container
     if docs
       -var len=docs.length
-      .row
-        .col-md-6.col-md-offset-3
-          form.form-vertical#inputs
-            input.form-control(type="file" id="fileInput" name="fileInput")
       br
       .row
         .col-md-6
@@ -29,8 +25,18 @@ block body
                 li(data-thumb=magnifyview)
                   img(src=magnifyview, alt="" style="width: 100%;")
         .col-md-6
-          div#canvas(style="box-shadow: 0 0 1px 1px grey; width: 500px; height: 500px; background-position: center center; background-size: contain" )
-
+          canvas(width="500", height="500", style="box-shadow: 0 0 1px 1px grey; display: block; margin: 0 auto;")#canvas
+          br
+          .col-md-12
+            input.form-control(type="file" id="fileInput" name="fileInput")
+          br
+          br
+          .col-md-12.text-center
+            span.btn.btn-success#rotateReset 重置
+            |&nbsp; &nbsp; &nbsp; &nbsp;
+            span.btn.btn-default#rotateAntiClockwise 逆时针旋转
+            |&nbsp; &nbsp; &nbsp; &nbsp;
+            span.btn.btn-default#rotateClockwise 顺时针旋转
 
 block scripts
   script(src="/js/lightslider.js")
