@@ -50,15 +50,12 @@ div {
   clear: both;
 }
 #logoFrame .logo {
-  width: 428px;
-  height: 67px;
+  height: 100px;
   display: block;
   margin: 0 auto;
-  background-color: #CCC;
-  background-image: url('../../assets/images/avatar.png');
   background-position: center bottom;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
 }
 #returnBtn {
   margin-top: 1em;
