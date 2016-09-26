@@ -1,0 +1,53 @@
+extends layout
+
+block body
+  #artwork.container
+    .row.details
+      .col-md-7
+        .row.basicinfo
+          span.title= item.artwork.title
+          a.editTitle 修改
+          span.id= item.sid
+          span.text-danger xxxx元
+        .row.properties
+          table.col-xs-12.table-striped.table-bordered.table-hover.text-center
+            tbody
+              tr
+                td 作者
+                td= item.artwork.artist.name
+              tr
+                td 合作者
+                td= item.artwork.coartist.name
+              tr
+                td 类型
+                td= item.artwork.category
+              tr
+                td 创作时间
+                td= item.artwork.times
+              tr
+                td 尺寸
+                td= item.artwork.size
+              tr
+                td 是否在平台销售
+                -var onplatform = item.artwork.onplatform || url&&url.length ? '是':'否';
+                td= onplatform
+
+          .col-md-12.text-center
+            -var url = "/verify/req/" + item._id
+            a(href=url).btn.btn-warning 比对
+      .col-md-5
+        .row
+          .col-md-12
+            ul#vertical
+              -var docs = item.identify.docs
+              each doc in docs
+                if doc.fullview
+                  -var fullview = "/uploads/" + doc.fullview
+                  li(data-thumb=fullview)
+                    img(src=fullview, alt="" style="width: 100%;")
+                if doc.preview
+                  -var preview = "/uploads/" + doc.preview
+                  li(data-thumb=preview)
+                    img(src=preview, alt="" style="width: 100%;")
+
+    .row.history

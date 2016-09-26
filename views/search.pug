@@ -39,5 +39,8 @@ block body
                 .col-xs-12= item.artwork.category
               .col-xs-12
                 br
-                -var url = "/verify/req/" + item._id
-                a(href=url).btn.btn-primary.col-xs-6.col-xs-offset-3 比对
+                -var curl = "/verify/req/" + item._id
+                a(href=curl).btn.btn-warning.col-xs-4.col-xs-offset-1 比对
+                -var durl = "/artwork/" + item._id
+                a(href=durl).btn.btn-success.col-xs-4.col-xs-offset-2 详情
+

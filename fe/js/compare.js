@@ -62,108 +62,50 @@ $(document).ready(function() {
                     ch = 500,
                     iw = img.width,
                     ih = img.height;
-                pos = calcPosition(cw, ch, iw, ih);
+                pos = calcPosition(cw, ch, iw, ih);  //jshint ignore: line
                 cntx.clearRect(0, 0, cw, ch);
                 cntx.drawImage(img, pos.sx, pos.sy, pos.sw, pos.sh, pos.dx, pos.dy, pos.dw, pos.dh);
             };
         }
     });
 
-    rotateClockwise.addEventListener('click', function() {
+    function rc() {
         rotateAngle += rotateSpan;
         rotate(canvas, cntx, translateX, translateY, pos, rotateAngle, img);
-    });
-    rotateAntiClockwise.addEventListener('click', function() {
+    }
+    rotateClockwise.addEventListener('click', rc);
+
+    function rac() {
         rotateAngle -= rotateSpan;
         rotate(canvas, cntx, translateX, translateY, pos, rotateAngle, img);
-    });
-    rotateReset.addEventListener('click', function() {
+    }
+    rotateAntiClockwise.addEventListener('click', rac);
+
+    function rr() {
         rotateAngle = 0;
         rotate(canvas, cntx, translateX, translateY, pos, rotateAngle, img);
+    }
+    rotateReset.addEventListener('click', rr);
+
+    $('body').on('keydown', function(e) {
+        console.log(e);
+        switch (e.keyCode) {
+            case 32:
+                rr();
+                e.preventDefault();
+                break;
+            case 37:
+                rac();
+                break;
+            case 39:
+                rc();
+                break;
+            default:
+                break;
+        }
     });
 
 });
-
-
-function calcPosition(cw, ch, iw, ih) {
-
-    if (arguments.length >= 4) {
-        var wr = cw / iw,
-            hr = ch / ih,
-            status = wr - hr,
-            sw,
-            sh,
-            dw,
-            dh;
-        if (status === 0) {
-            return {
-                dx: 0,
-                dy: 0,
-                dw: cw,
-                dh: ch,
-                sx: 0,
-                sy: 0,
-                sw: iw,
-                sh: ih
-            };
-        }
-        if (arguments[5]) {
-            // isContain = false; // cover
-            if (status < 0) {
-                sh = ih * iw / cw;
-                return {
-                    dx: 0,
-                    dy: 0,
-                    dw: cw,
-                    dh: ch,
-                    sx: 0,
-                    sy: 0,
-                    sw: iw,
-                    sh: sh
-                };
-            } else {
-                sw = iw * ih / ch;
-                return {
-                    dx: 0,
-                    dy: 0,
-                    dw: cw,
-                    dh: ch,
-                    sx: 0,
-                    sy: 0,
-                    sw: sw,
-                    sh: ih
-                };
-            }
-        }
-        if (status < 0) {
-            dh = ih * wr;
-            return {
-                dx: 0,
-                dy: (ch - dh) >> 1,
-                dw: cw,
-                dh: dh,
-                sx: 0,
-                sy: 0,
-                sw: iw,
-                sh: ih
-            };
-        } else {
-            dw = iw * hr;
-            return {
-                dx: (cw - dw) >> 1,
-                dy: 0,
-                dw: dw,
-                dh: ch,
-                sx: 0,
-                sy: 0,
-                sw: iw,
-                sh: ih
-            };
-        }
-
-    }
-    return false;
-}
 
 function rotate(canvas, painter, translateX, translateY, pos, angle, img) {
     if (painter && pos && canvas) {

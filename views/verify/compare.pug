@@ -31,13 +31,15 @@ block body
             input.form-control(type="file" id="fileInput" name="fileInput")
           br
           br
-          .col-md-12.text-center
-            span.btn.btn-success#rotateReset 重置
-            |&nbsp; &nbsp; &nbsp; &nbsp;
-            span.btn.btn-default#rotateAntiClockwise 逆时针旋转
-            |&nbsp; &nbsp; &nbsp; &nbsp;
-            span.btn.btn-default#rotateClockwise 顺时针旋转
+          .col-md-12.text-center.btn-group.btn-group-justified
+            span.btn.btn-default#rotateAntiClockwise
+              i.glyphicon.glyphicon-arrow-left
+              i  逆时针旋转
+            span.btn.btn-success#rotateReset 重置 (空格键)
+            span.btn.btn-default#rotateClockwise
+              i 顺时针旋转&nbsp;
+              i.glyphicon.glyphicon-arrow-right
 
 block scripts
   script(src="/js/lightslider.js")
-  script(src="/js/runslider.js")
+  script(src="/js/compare.js")

@@ -265,6 +265,10 @@ router.get('/search', function(req, res, next) { //jshint ignore: line
 
     });
 });
+router.get('/artwork/:id', function(req, res, next) { //jshint ignore: line
+
+});
+
 
 
 module.exports = router;
