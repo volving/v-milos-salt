@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(grunt) {
-    console.log('hello, grunt running!');
+    console.log('Grunt-roooar!');
     require('time-grunt')(grunt);
     require('load-grunt-tasks')(grunt);
     var config = {
