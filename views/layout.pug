@@ -35,14 +35,14 @@ html
 
         if(user)
           a.item.floatright#signout(href="/logout") 退出登录
-          -var url = '/user?id=' + user._id;
-          a.item.floatright#user(href=url) #{user.username}
+          //- -var url = '/user?id=' + user._id;
+          a.item.floatright#user(href="/user") #{user.username}
         else
           a.item.floatright#signin(href="/login") 您尚未登录(点此登录)
           a.item.floatright#signup(href="/register") 注册
 
-    a(href="/" style="display: inline-block; position: fixed; right: 5em; bottom: 5em;").btn.btn-default
-      i.glyphicon.glyphicon-home &nbsp;&nbsp;返回首页
+    //- a(href="/" style="display: inline-block; position: fixed; right: 5em; bottom: 5em;").btn.btn-default
+    //-   i.glyphicon.glyphicon-home &nbsp;&nbsp;返回首页
     br
     br
     .container
