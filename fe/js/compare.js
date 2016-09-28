@@ -56,7 +56,6 @@ $(document).ready(function() {
             urlData = window.URL.createObjectURL(files[0]);
             img.src = urlData;
             img.onload = function() {
-                console.log('hey');
                 rotateAngle = 0;
                 var cw = 500,
                     ch = 500,
@@ -88,7 +87,6 @@ $(document).ready(function() {
     rotateReset.addEventListener('click', rr);
 
     $('body').on('keydown', function(e) {
-        console.log(e);
         switch (e.keyCode) {
             case 32:
                 rr();

@@ -5,34 +5,37 @@ var router = express.Router();
 var User = require('../models/User');
 var passport = require('passport');
 
-var multer = require('multer');
-var uploader = multer({
-    dest: './public/uploads'
-});
+// var multer = require('multer');
+// var uploader = multer({
+//     dest: './public/uploads'
+// });
 var Identify = require('../models/Identify');
 // var Identity = require('../models/Identity');
 // router.use(function(req, res, next){
 //     next();
 // });
 /* GET home page. */
-router.get('/', function(req, res, next) { //jshint ignore: line
+router.get('/', function (req, res, next) { //jshint ignore: line
     res.render('index');
 });
-router.get('/register', function(req, res) { //jshint ignore: line
-    req.flash('warning', '注册功能暂不开放!');
-    return res.redirect('/');
-    // res.render('register', {
-    //     // csrfToken: req.csrfToken()
-    // });
+router.get('/register', function (req, res) { //jshint ignore: line
+    // console.log(req.session);
+    // req.session.testid='testtesttest';
+    res.render('register', {
+        // csrfToken: req.csrfToken()
+        captcha: 'capti'
+    });
+    // req.flash('warning', '注册功能暂不开放!');
+    // return res.redirect('/');
 });
-
-var getTypes = function(str) {
+/*
+var getTypes = function (str) {
     if (!str || str.length < 1) {
         return '';
     }
     var arr = str.split(','),
         types = [];
-    arr.map(function(item) {
+    arr.map(function (item) {
         if (item && item.length > 0) {
             item = item.trim();
             if (item.length > 0) {
@@ -42,72 +45,77 @@ var getTypes = function(str) {
     });
     return types;
 };
-/*
-router.post('/register', uploader.fields([
-    { name: 'attachments' }, //, maxCount: 5
-]), function(req, res, next) { //jshint ignore: line
+*/
+var check = require('../bin/check');
 
-    var username = req.body.username || '';
-    if (username.length > 3) {
-        var form = req.body;
-        var files = req.files;
-        for (var file in files) {
-            var arr = [];
-            var field = files[file];
-            if (field) {
-                for (var i = 0, len = field.length; i < len; i++) {
-                    var item = field[i];
-                    if (item && item.filename) {
-                        arr.push(item.filename);
-                    }
-                }
-            }
-            form[file] = arr;
-        }
-        User.findOne({ username: username }, function(err, user) {
-            if (err) {
-                res.status = 500;
-                res.end();
-            }
-            if (user) {
-                req.flash('warning', ['该用户名已经存在!']);
-                return res.redirect('/register');
-            } else {
-                var newUser = new User({
-                    username: username,
-                    password: form.password || 'oooooo',
-                    nickname: form.nickname || '',
-                    fullname: form.fullname || '',
-                    gender: form.gender || '',
-                    region: form.region || '',
-                    email: form.email || '',
-                    mobile: form.mobile || '',
-                    idno: form.idno || '',
-                    attachments: form.attachments || '',
-                    remarks: form.remarks || '',
-                    usertype: getTypes(form.usertype)
-                });
 
-                newUser.save(function(err, user) { //jshint ignore: line
-                    if (err) {
-                        next(err);
-                    }
-                    return res.render('info', {
-                        title: '用户信息已经创建!',
-                        content: '您的审核已经提交, 我们尽快审核, 结果会发送到您的邮箱, 请您注意查收!'
-                    });
-                });
-            }
-        });
-    } else {
-        req.flash('warning', ['请先完成输入!']);
-        res.redirect('/register');
+router.post('/register', /*uploader.fields([ { name: 'attachments' }, //, maxCount: 5 ]), */
+  function (req, res, next) { //jshint ignore: line
+    var form = req.body;
+    var username = form.username || '';
+    var warning = [];
+    var captcha = form.captcha;
+    if (captcha !== req.session.captcha) {
+        warning.push('验证码不正确');
     }
+    if(form.usercontract !== 'on'){
+        warning.push('您必须同意且遵守我们的《用户协议》');
+    }
+    if (!check.checkPhoneNumber(username)) {
+        warning.push('请输入格式正确的手机号');
+    }
+    if(warning.length > 0){
+        req.flash('warning', warning);
+        return res.redirect('/register');
+    }
+    // var files = req.files;
+    // for (var file in files) {
+    //     var arr = [];
+    //     var field = files[file];
+    //     if (field) {
+    //         for (var i = 0, len = field.length; i < len; i++) {
+    //             var item = field[i];
+    //             if (item && item.filename) {
+    //                 arr.push(item.filename);
+    //             }
+    //         }
+    //     }
+    //     form[file] = arr;
+    // }
+    User.findOne({ username: username }, function (err, user) {
+        if (err) {
+            res.status = 500;
+            res.end();
+        }
+        if (user) {
+            warning.push('该手机号已经存在!');
+            req.flash('warning', warning);
+            return res.redirect('/register');
+        } else {
+            var newUser = new User({
+                username: username,
+                password: form.password || 'oooooo',
+                mobile: username || '',
+                remarks: form.remarks || ''
+                // usertype: getTypes(form.usertype)
+            });
+
+            newUser.save(function (err, user) { //jshint ignore: line
+                if (err) {
+                    return next(err);
+                }
+                return res.render('info', {
+                    title: '用户信息已经创建!',
+                    content: '您的审核已经提交, 我们尽快审核, 结果会发送到您的邮箱, 请您注意查收!'
+                });
+            });
+        }
+    });
 
 });
-*/
 
-router.get('/login', function(req, res) { //jshint ignore: line
+
+router.get('/login', function (req, res) { //jshint ignore: line
     res.render('login', {
         // csrfToken: req.csrfToken()
     });
@@ -171,7 +179,7 @@ router.get('/login', function(req, res) { //jshint ignore: line
 //     failureFlash: true
 // }));
 
-router.post('/login', function(req, res, next) { //jshint ignore: line
+router.post('/login', function (req, res, next) { //jshint ignore: line
     var username = req.body.username || '',
         password = req.body.password || '';
     var warning = [];
@@ -185,7 +193,7 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
         req.flash('warning', warning);
         return res.redirect('/login');
     }
-    passport.authenticate('login', function(err, user, info) {
+    passport.authenticate('login', function (err, user, info) {
         if (err) {
             return next(err);
         }
@@ -193,7 +201,7 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
             req.flash('warning', [info.message]);
             return res.redirect('/login');
         }
-        req.logIn(user, function(err) {
+        req.logIn(user, function (err) {
             if (err) {
                 return next(err);
             }
@@ -203,14 +211,14 @@ router.post('/login', function(req, res, next) { //jshint ignore: line
     })(req, res, next);
 });
 
-router.get('/logout', function(req, res) { //jshint ignore: line
+router.get('/logout', function (req, res) { //jshint ignore: line
     req.logout();
     req.flash('success', ['您已退出']);
     res.redirect('/');
 });
 
 
-router.get('/search', function(req, res, next) { //jshint ignore: line
+router.get('/search', function (req, res, next) { //jshint ignore: line
     var search = req.query.search,
         condition = {};
     if (search) {
@@ -252,7 +260,7 @@ router.get('/search', function(req, res, next) { //jshint ignore: line
     }, {
         path: 'artwork',
         select: 'title category'
-    }]).exec(function(err, list) {
+    }]).exec(function (err, list) {
         if (err) {
             req.flash('warning', ['查询出错']);
             return next(err);
@@ -267,7 +275,7 @@ router.get('/search', function(req, res, next) { //jshint ignore: line
 
     });
 });
-router.get('/artwork/:id', function(req, res, next) { //jshint ignore: line
+router.get('/artwork/:id', function (req, res, next) { //jshint ignore: line
 
 });
 

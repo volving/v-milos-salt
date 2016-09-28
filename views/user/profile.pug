@@ -1,0 +1,58 @@
+extends ../layout
+
+mixin field(_label, _for, _type, _name, _id, _class, _placeholder, _value)
+  .form-group
+    label.col-md-4.control-label(for=_for)= _label
+    .col-md-4
+      input.form-control(class=_class, id=_id, type=_type, name=_name, value=_value, placeholder=_placeholder)
+
+block body
+  .container
+    .panel.panel-default
+      .panel-heading.text-center
+        h2 用户中心
+      .panel-body
+        form.form-horizontal(action="/user/save" role="form" method="POST" enctype="multipart/x-www-form-urlencoded")
+          input(type="hidden" name="_csrf" value=csrfToken)
+
+          +field('账户名', 'username', 'text', 'username', 'username', '', '请在此处输入手机号/邮箱/英文字母组合, 长度超过6个字符', user.username)
+          +field('常用名', 'nickname', 'text', 'nickname', 'nickname', '', '', user.nickname)
+          +field('姓名全称', 'fullname', 'text', 'fullname', 'fullname', '', '', user.fullname)
+
+          .form-group
+            label.col-md-5.control-label(for="gender") 性别
+            .col-md-3
+              label.radio-inline
+                if user.gender === "m"
+                 input#gender_male(type="radio",name="gender",value="m", checked)
+                else
+                  input#gender_male(type="radio",name="gender",value="m")
+                | 男
+              label.radio-inline
+                if user.gender === "f"
+                  input#gender_female(type="radio",name="gender",value="f", checked)
+                else
+                  input#gender_female(type="radio",name="gender",value="f")
+                | 女
+              label.radio-inline
+                if user.gender === "x"
+                  input#gender_other(type="radio",name="gender",value="x", checked)
+                else
+                  input#gender_other(type="radio",name="gender",value="x")
+                | 保密
+
+          +field('籍贯', 'region', 'text', 'region', 'region', '', '', user.region)
+          +field('Email', 'email', 'email', 'email', 'email', '', '', user.email)
+          +field('手机号', 'mobile', 'tel', 'mobile', 'mobile', '', '', user.mobile)
+          +field('证件号码(有效身份证等)', 'idno', 'text', 'idno', 'idno', '', '', user.idno)
+
+          //- .form-group
+          //-   label.col-md-4.control-label(for="attachments") 认证附件 (可多选)
+          //-   .col-md-4
+          //-     input.form-control#attachments(type="file" name="attachments" multiple="multiple")
+
+          +field('备注', 'remarks', 'text', 'remarks', 'remarks', '', '', user.remarks)
+
+          .form-group
+            .col-xs-12.col-md-4.col-md-push-4
+              button#submit.btn.btn-success.col-xs-12(type="submit") 提交
