@@ -19,11 +19,11 @@ router.get('/', function(req, res, next) { //jshint ignore: line
     res.render('index');
 });
 router.get('/register', function(req, res) { //jshint ignore: line
-    req.flash('warning', '注册功能暂不开放!');
-    return res.redirect('/');
-    // res.render('register', {
-    //     // csrfToken: req.csrfToken()
-    // });
+    // req.flash('warning', '注册功能暂不开放!');
+    // return res.redirect('/');
+    res.render('register', {
+        // csrfToken: req.csrfToken()
+    });
 });
 
 var getTypes = function(str) {
@@ -42,7 +42,7 @@ var getTypes = function(str) {
     });
     return types;
 };
-/*
+
 router.post('/register', uploader.fields([
     { name: 'attachments' }, //, maxCount: 5
 ]), function(req, res, next) { //jshint ignore: line
@@ -105,7 +105,7 @@ router.post('/register', uploader.fields([
     }
 
 });
-*/
+
 
 router.get('/login', function(req, res) { //jshint ignore: line
     res.render('login', {
