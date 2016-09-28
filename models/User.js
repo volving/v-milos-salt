@@ -31,6 +31,10 @@ var userSchema = new Schema({
     lastsession: {
         which: String,
         id: String
+    },
+    lastmodify: {
+        type: Date,
+        default: 0
     }
 });
 
