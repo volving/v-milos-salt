@@ -1,6 +1,7 @@
 public/
-
+fe/tmp/
 conf/secret.js
+
 ###Node###
 bower_components
 
