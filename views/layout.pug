@@ -15,8 +15,8 @@ html
     title= title
     link(rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.css")
     link(rel="stylesheet" href="/css/basic.css")
-    script(src="/vendor/jquery/dist/jquery.js")
-    script(src="/vendor/bootstrap/dist/js/bootstrap.js")
+    script(src="/vendor/jquery/dist/jquery.min.js")
+    script(src="/vendor/bootstrap/dist/js/bootstrap.min.js")
     script(src="http://localhost:35729/livereload.js")
     block head
 
@@ -51,37 +51,37 @@ html
           button(type="button" data-dismiss="alert" aria-label="close").close
             span(aria-hidden="true") &times;
           ul
-          each item in error
-            li= item
+            each item in error
+              li= item
       if (danger && danger.length > 0)
         .alert.alert-danger.alert-dismissible(role="alert")#danger
           button(type="button" data-dismiss="alert" aria-label="close").close
             span(aria-hidden="true") &times;
           ul
-          each item in danger
-            li= item
+            each item in danger
+              li= item
       if (warning && warning.length > 0)
         .alert.alert-warning.alert-dismissible(role="alert")#warning
           button(type="button" data-dismiss="alert" aria-label="close").close
             span(aria-hidden="true") &times;
           ul
-          each item in warning
-            li= item
+            each item in warning
+              li= item
 
       if (info && info.length > 0)
         .alert.alert-info.alert-dismissible(role="alert")#info
           button(type="button" data-dismiss="alert" aria-label="close").close
             span(aria-hidden="true") &times;
           ul
-          each item in info
-            li= item
+            each item in info
+              li= item
       if (success && success.length > 0)
         .alert.alert-success.alert-dismissible(role="alert")#success
           button(type="button" data-dismiss="alert" aria-label="close").close
             span(aria-hidden="true") &times;
           ul
-          each item in success
-            li= item
+            each item in success
+              li= item
 
     block body
 
