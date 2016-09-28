@@ -3,8 +3,8 @@ extends layout
 //- Created by volving on 8/31/16.
 mixin field(_label, _for, _type, _name, _id, _class, _placeholder)
   .form-group
-    label.col-md-5.control-label(for=_for) #{_label}
-    .col-md-3
+    label.col-md-4.control-label(for=_for) #{_label}
+    .col-md-4
       input.form-control(class=_class id=_id type=_type name=_name)
 
 block body
@@ -13,14 +13,18 @@ block body
     br
 
   .container
-    form.form-horizontal(action="/register" role="form" method="POST" enctype="multipart/form-data")
+    form.form-horizontal(action="/register" role="form" method="POST" enctype="multipart/x-www-form-urlencoded")
       input(type="hidden" name="_csrf" value=csrfToken)
 
       +field('手机号', 'username', 'text', 'username', 'username', '', '请在此处输入手机号')
-      +field('验证码', 'text', 'captcha', 'captcha', '', '')
+      .form-group
+        label.col-md-4.control-label(for=_for) 验证码
+        .col-md-2
+          input.form-control(type="text", id="captcha", name="captcha", placeholder="在此输入验证码", autocomplete="off")
+        .col-md-2
+          input.form-control(type="button", value="发送验证码").btn.btn-success
       +field('登录密码', 'password', 'password', 'password', 'password', '', '')
       +field('备注', 'text', 'remarks', 'remarks', '', '')
-
 
       .form-group
         .col-md-3.col-md-push-5
@@ -31,3 +35,5 @@ block body
       .form-group
         .col-xs-12.col-md-4.col-md-push-4
           button#submit.btn.btn-primary.col-xs-12(type="submit") 提交
+
+  script(src="")
