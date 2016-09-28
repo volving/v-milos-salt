@@ -1,0 +1,39 @@
+extends ../layout
+
+mixin field(_label, _for, _type, _name, _id, _class, _placeholder)
+  .form-group
+    label.col-md-4.control-label(for=_for) #{_label}
+    .col-md-4
+      input.form-control(class=_class id=_id type=_type name=_name)
+
+block body
+  .container
+    .panel.panel-default
+      .panel-heading.text-center
+        h2 用户中心
+      .panel-body
+        form.form-horizontal(action="/user/save")
+        .row
+          .col-md-2.bg-info 用户名:
+          .col-md-4= user.username
+          .col-md-2.bg-info 昵称:
+          .col-md-4= user.nickname
+        .row
+          .col-md-2.bg-info Email:
+          .col-md-4= user.email
+
+          .col-md-2.bg-info 手机号:
+          .col-md-4= user.mobile
+        .row
+          .col-md-2.bg-info 用户类型
+          .col-md-4= user.usertype
+          .col-md-2.bg-info 注册时间:
+          .col-md-4= user.ts
+        .row
+          .col-md-2.bg-info 备注
+          .col-md-10= user.remarks
+        .row
+          .col-sm-12.col-md-4.col-md-offset-4
+            br
+            br
+            input(type="submit", value="保存").col-md-12.col-xs-12.btn.btn-success
