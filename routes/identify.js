@@ -19,28 +19,98 @@ function getMongoId(str) {
     return mongoose.Types.ObjectId(str);
 }
 
-router.use(function(req, res, next) {
+router.get('/', function (req, res, next) { //jshint ignore: line
+    var params = req.query;
+    var sid = params && params.sid || '';
+    Identify.findOne({ sid: sid }).populate([{
+        path: 'docs',
+        select: 'fullview preview magnifyview zoom',
+        options: {
+            sort: { ts: -1 }
+        }
+    }, {
+        path: 'artwork',
+        select: 'title category'
+    }]).exec(function (err, identify) {
+        if (err) {
+            req.flash('warning', ['查询出错']);
+            return next(err);
+        }
+        if (!identify) {
+            req.flash('warning', ['没有查询到相应记录']);
+            return res.render('./search');
+        }
+        if (req.user) {
+            return res.render('./identify/subject_edit', {
+                identify: identify
+            });
+        } else {
+            return res.render('./identify/subject_public', {
+                identify: identify
+            });
+        }
+    });
+});
+
+router.post('/', function (req, res, next) { //jshint ignore: line
+    var f = req.body;
+    var warning = [];
+    if (!f.artwork) {
+        warning.push('数据不完整');
+    }
+    if (!f.title) {
+        warning.push('艺术品名称为必填项');
+    }
+    if (warning.length > 0) {
+        if (f.sid) {
+            return res.redirect('/identify?sid=' + f.sid);
+        }
+        return res.redirect('/identify');
+    }
+
+    Artwork.update({ _id: f.artwork }, { $set: { title: f.title, category: f.category } })
+        .exec(function (err, artwork) {
+            if (err) {
+                return next(err);
+            }
+            if (artwork) {
+                req.flash('success', ['保存完成']);
+                return res.redirect('/identify?sid=' + f.sid);
+            }
+            return res.redirect('/search');
+        });
+});
+
+router.get('/public', function (req, res, next) { //jshint ignore: line
+    res.redirect('/identify/');
+});
+
+
+
+router.use(function (req, res, next) {
+    // var query = req.query;
     if (!req.user) {
         req.flash('info', ['请您先登录']);
-        return res.redirect('/login');
+        return res.redirect('/login?pre=/');
     }
     next();
 });
 
-router.get('/', function(req, res) { //jshint ignore: line
+router.get('/ack', function (req, res) { //jshint ignore: line
     res.render('./identify/ack');
 });
 
-router.get('/pre', function(req, res) { //jshint ignore: line
+router.get('/pre', function (req, res) { //jshint ignore: line
     res.render('./identify/pre', {
         // csrfToken: req.csrfToken(),
     });
 });
 
+
 router.post('/pre', uploader.fields([
     { name: 'attachments', maxCount: 1 },
     { name: 'photos', maxCount: 1 }
-]), function(req, res, next) { //jshint ignore: line
+]), function (req, res, next) { //jshint ignore: line
     var form = req.body;
     var files = req.files;
     if (!files) {
@@ -69,20 +139,20 @@ router.post('/pre', uploader.fields([
      */
     //------------------------------------------------Start of /pre process
     // save applicant
-    applicant.save().then(function(obj) {
+    applicant.save().then(function (obj) {
         // save artist & coartist
         objs.applicant = obj;
         if (req.body.artist) {
             var artist = new Artist({
                 name: req.body.artist
             });
-            return artist.save().then(function(obj) {
+            return artist.save().then(function (obj) {
                 objs.artist = obj;
                 if (req.body.coartist) {
                     var coartist = new Artist({
                         name: req.body.coartist
                     });
-                    return coartist.save().then(function(obj) {
+                    return coartist.save().then(function (obj) {
                         if (obj) {
                             objs.coartist = obj;
                         }
@@ -93,7 +163,7 @@ router.post('/pre', uploader.fields([
             });
         }
         return objs;
-    }).then(function() {
+    }).then(function () {
         // save artwork
         var artist_id = objs.artist && objs.artist._id || undefined,
             coartist_id = objs.coartist && objs.coartist._id || undefined;
@@ -108,7 +178,7 @@ router.post('/pre', uploader.fields([
             url: req.body.url
 
         });
-        return artwork.save().then(function(obj) {
+        return artwork.save().then(function (obj) {
             if (!obj) {
                 req.flash('danger', ['信息保存失败']);
                 throw new Error('Artwork 保存失败');
@@ -116,7 +186,7 @@ router.post('/pre', uploader.fields([
             objs.artwork = obj;
             return objs;
         });
-    }).then(function() {
+    }).then(function () {
         // save identify && add req.session.identify_id
         var sid = new mongoose.Types.ObjectId();
         var identify = new Identify({
@@ -125,7 +195,7 @@ router.post('/pre', uploader.fields([
             artwork: objs.artwork._id,
             sid: sid
         });
-        return identify.save().then(function(obj) {
+        return identify.save().then(function (obj) {
             if (!obj) {
                 req.flash('danger', ['信息保存失败']);
                 throw new Error('Identify 保存失败');
@@ -137,7 +207,7 @@ router.post('/pre', uploader.fields([
             req.session.sid = sid;
             return objs;
         });
-    }).then(function() {
+    }).then(function () {
         // save identity && add req.session.identity_id
         var sid = req.session.sid;
         var title = objs.artworkd && objs.artworkd.title || '',
@@ -157,7 +227,7 @@ router.post('/pre', uploader.fields([
             verifys: [],
             availability: 'creating'
         });
-        return identity.save().then(function(obj) {
+        return identity.save().then(function (obj) {
             if (!obj) {
                 req.flash('danger', ['信息保存失败']);
                 throw new Error('Identity 保存失败');
@@ -168,7 +238,7 @@ router.post('/pre', uploader.fields([
             }
             res.redirect('/identify/record');
         });
-    }).catch(function(err) {
+    }).catch(function (err) {
         req.flash('danger', ['发生了其他错误']);
         return next(err);
     });
@@ -176,13 +246,13 @@ router.post('/pre', uploader.fields([
 });
 
 
-router.get('/record', function(req, res, next) { //jshint ignore: line
+router.get('/record', function (req, res, next) { //jshint ignore: line
     var identify_id = req.session.identify_id;
     if (!identify_id) {
         req.flash('warning', ['请按照流程进行操作']);
         return res.redirect('/identify/pre');
     }
-    Identify.findOne({ _id: getMongoId(identify_id) }).populate('docs').exec().then(function(obj) {
+    Identify.findOne({ _id: getMongoId(identify_id) }).populate('docs').exec().then(function (obj) {
         if (!obj) {
             req.flash('warning', ['未能找到对应的记录']);
             res.redirect('/identify/pre');
@@ -193,7 +263,7 @@ router.get('/record', function(req, res, next) { //jshint ignore: line
             identify_id: identify_id,
             docs: docs
         });
-    }).catch(function(err) {
+    }).catch(function (err) {
         return next(err);
     });
 });
@@ -202,7 +272,7 @@ router.post('/record', uploader.fields([
     { name: 'fullview', maxCount: 1 },
     { name: 'preview', maxCount: 1 },
     { name: 'magnifyview', maxCount: 1 }
-]), function(req, res, next) { //jshint ignore: line
+]), function (req, res, next) { //jshint ignore: line
 
     var form = req.body;
     var files = req.files;
@@ -219,13 +289,13 @@ router.post('/record', uploader.fields([
         zoom: form.zoom,
         remarks: form.remarks
     });
-    doc.save(function(err, obj) {
+    doc.save(function (err, obj) {
         var identify_id = req.session.identify_id;
         // if (!(identify_id&&identity_id)) {
         //     req.flash('warning', ['所需参数未能提供而出错, 请按流程操作']);
         //     return;
         // }
-        console.log(obj,'\n'+ identify_id);
+        // console.log(obj,'\n'+ identify_id);
         if (err) {
             req.flash('warning', ['保存时发生错误']);
             return next(err);
@@ -235,7 +305,7 @@ router.post('/record', uploader.fields([
             return req.redirect('/identify/record');
         }
         if (obj && identify_id) {
-            Identify.findOne({ _id: getMongoId(identify_id) }).exec(function(err, idf) {
+            Identify.findOne({ _id: getMongoId(identify_id) }).exec(function (err, idf) {
                 if (err) {
                     return next(err);
                 }
@@ -244,7 +314,7 @@ router.post('/record', uploader.fields([
                     return req.redirect('/identify/record');
                 }
                 idf.docs.push(obj._id);
-                idf.save(function(err, idtf) {
+                idf.save(function (err, idtf) {
                     if (err) {
                         return next(err);
                     }
@@ -260,25 +330,25 @@ router.post('/record', uploader.fields([
     });
 });
 
-router.get('/post', function(req, res) { //jshint ignore: line
+router.get('/post', function (req, res) { //jshint ignore: line
     delete req.session.identify_id;
     delete req.session.sid;
     res.render('./identify/post');
 });
 
 
-router.get('/verify', function(req, res) { //jshint ignore: line
+router.get('/verify', function (req, res) { //jshint ignore: line
 
 });
 
-router.post('/upload', uploader.any(), function(req, res, next) { //jshint ignore: line
+router.post('/upload', uploader.any(), function (req, res, next) { //jshint ignore: line
     var filename = req.file.filename;
     res.json({
         filename: filename
     });
 });
 
-router.get('/manage', function(req, res, next) { //jshint ignore: line
+router.get('/manage', function (req, res, next) { //jshint ignore: line
 
 });
 

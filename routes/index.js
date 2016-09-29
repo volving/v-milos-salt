@@ -19,8 +19,6 @@ router.get('/', function (req, res, next) { //jshint ignore: line
     res.render('index');
 });
 router.get('/register', function (req, res) { //jshint ignore: line
-    // console.log(req.session);
-    // req.session.testid='testtesttest';
     res.render('register', {
         // csrfToken: req.csrfToken()
         captcha: 'capti'
@@ -49,8 +47,7 @@ var getTypes = function (str) {
 var check = require('../bin/check');
 
 
-router.post('/register', /*uploader.fields([ { name: 'attachments' }, //, maxCount: 5 ]), */
-  function (req, res, next) { //jshint ignore: line
+router.post('/register', /*uploader.fields([ { name: 'attachments' }, //, maxCount: 5 ]), */ function (req, res, next) { //jshint ignore: line
     var form = req.body;
     var username = form.username || '';
     var warning = [];
@@ -58,13 +55,13 @@ router.post('/register', /*uploader.fields([ { name: 'attachments' }, //, maxCou
     if (captcha !== req.session.captcha) {
         warning.push('验证码不正确');
     }
-    if(form.usercontract !== 'on'){
+    if (form.usercontract !== 'on') {
         warning.push('您必须同意且遵守我们的《用户协议》');
     }
     if (!check.checkPhoneNumber(username)) {
         warning.push('请输入格式正确的手机号');
     }
-    if(warning.length > 0){
+    if (warning.length > 0) {
         req.flash('warning', warning);
         return res.redirect('/register');
     }
@@ -111,7 +108,6 @@ router.post('/register', /*uploader.fields([ { name: 'attachments' }, //, maxCou
             });
         }
     });
-
 });
 
 
@@ -219,13 +215,13 @@ router.get('/logout', function (req, res) { //jshint ignore: line
 
 
 router.get('/search', function (req, res, next) { //jshint ignore: line
-    var search = req.query.search,
+    var sid = req.query.sid,
         condition = {};
-    if (search) {
-        var reg = new RegExp(search, 'i');
+    if (sid) {
+        var reg = new RegExp(sid, 'i');
         condition = { sid: { $regex: reg } };
     }
-
+    // console.log(condition);
     // Artwork.find({}).populate('artist coartist').exec(function(err, list) {
     //     if (err) {
     //         return next(err);
@@ -234,7 +230,7 @@ router.get('/search', function (req, res, next) { //jshint ignore: line
     //         return next();
     //     }
     //     console.log(list);
-    //     return res.render('./search', {
+    //     return res.render('./id', {
     //         artworks: list
     //     });
     // });
@@ -245,9 +241,9 @@ router.get('/search', function (req, res, next) { //jshint ignore: line
     //     }
     //     if (!list) {
     //         req.flash('info', ['没有查询到相应记录']);
-    //         return res.render('./search');
+    //         return res.render('./id');
     //     }
-    //     return res.render('./search', {
+    //     return res.render('./id', {
     //         identitys: list
     //     });
     // });
@@ -272,12 +268,12 @@ router.get('/search', function (req, res, next) { //jshint ignore: line
         return res.render('./search', {
             identifys: list
         });
-
     });
 });
-router.get('/artwork/:id', function (req, res, next) { //jshint ignore: line
 
-});
+
+
+
 
 
 
