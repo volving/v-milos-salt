@@ -6,7 +6,7 @@ block body
       form.form-horizontal(action="/search" rol="form" method="GET")
         //- input(type="hidden" name="_csrf" value="#{csrfToken}")
         .col-sm-6.col-sm-offset-2.col-md-6.col-md-offset-2
-          input.form-control#searchInput(type="text" name="search" placeholder="请输入保真证书后几位, 例如 57ce***32e4517 的 2e4517, 位数越多越精确")
+          input.form-control#searchInput(type="text" name="sid" placeholder="请输入保真证书后几位, 例如 57ce***32e4517 的 2e4517, 位数越多越精确")
         .col-sm-2.col-md-2
           input.btn.btn-primary.form-control(type="submit" value="搜索")
     br
@@ -14,8 +14,8 @@ block body
 
     if identifys && identifys.length > 0
       .row#results
-        .col-xs-12.card
-          each item in identifys
+        .col-xs-12
+          each item, index in identifys
             div(style="margin: .5em; padding: .5em; display: inline-block; float: left; width: 300px; box-shadow: 0 0 1px 0 grey;")
               //- div= item
               if item.docs[0]
@@ -40,7 +40,12 @@ block body
               .col-xs-12
                 br
                 -var curl = "/verify/req/" + item._id
-                a(href=curl).btn.btn-warning.col-xs-4.col-xs-offset-1 比对
-                -var durl = "/artwork/" + item._id
-                a(href=durl).btn.btn-success.col-xs-4.col-xs-offset-2 详情
+                a(href=curl).btn.btn-primary.col-xs-4.col-xs-offset-1 比对
+                if item.sid
+                  -var durl = "/identify?sid=" + item.sid
+                  a(href=durl).btn.btn-success.col-xs-4.col-xs-offset-2 详情
+                else
+                  span.btn.btn-warning.disabled.col-xs-4.col-xs-offset-2 暂无详情
+            if (index+1)%3 === 0
+              .row
 
