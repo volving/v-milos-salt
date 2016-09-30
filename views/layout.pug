@@ -28,6 +28,7 @@ html
         a.item#contactus(href="/about/contactus") 联系我们
         a.item#agents(href="/agent") 网点查询
         if(user && user.usertype.indexOf('admin') > -1)
+          a.item#artwork(href="/artwork") 艺术品
           a.item#agentCreate(href="/agent/create") 新网点录入
           a.item#identify(href="/identify/pre") 录入纸纹信息
           a.item#admin(href="/admin") 控制台
@@ -39,7 +40,7 @@ html
           //- -var url = '/user?id=' + user._id;
           a.item.floatright#user(href="/user") #{user.username}
         else
-          a.item.floatright#signin(href="/login") 您尚未登录(点此登录)
+          a.item.floatright#signin(href="/login") 未登录(点此登录)
           a.item.floatright#signup(href="/register") 注册
 
     //- a(href="/" style="display: inline-block; position: fixed; right: 5em; bottom: 5em;").btn.btn-default

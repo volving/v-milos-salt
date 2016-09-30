@@ -1,0 +1,71 @@
+extends ../layout
+
+
+mixin field(_label, _type, _name, _id, _class, _value, _placeholder)
+  //- .form-group
+  .col-md-2
+    label.control-label(for=_id)= _label
+  .col-md-4
+    input.form-control(class=_class, id=_id, type=_type, name=_name, value=_value, placeholder=_placeholder)
+
+mixin fileField(_label, _name, _id)
+  //- .form-group
+  .col-md-2
+    label.control-label(for=_id)= _label
+  .col-md-4
+    input.form-control(id=_id, type="file", name=_name, multiple, hidden).fileInput
+
+mixin selects(_label, _name, _class, _placeholder)
+  .form-group
+    .col-md-2
+      label.control-label(for=_id)= _label
+    .col-md-4
+      select.form-control(class=_class, name=_name)
+        option= _placeholder
+
+
+block body
+  .container
+    .panel.panel-default
+      .panel-heading.text-center
+        h2 修改艺术品
+      .panel-body
+        form(action="/artwork/edit", role="form", method="POST", enctype="multipart/form-data")
+          input(type="hidden", name="id", value=artwork._id)
+
+          .row
+            +field('标题', 'text', 'title', 'title', '', artwork.title, '在此输入名称')
+            -var artistName = artwork.artist && artwork.artist.name || ''
+            -var artistId = artwork.artist && artwork.artist.id || ''
+            +field('作者', 'text', '_artist', '_artist', '', artistName, '在此输入作者')
+            input(type="hidden", id="artist", name="artist", value=artistId)
+
+          .row
+            -var coartistName = artwork.coartist && artwork.coartist.name || ''
+            -var coartistId = artwork.coartist && artwork.coartist.id || ''
+            +field('协作者', 'text', '_coartist', '_coartist', '', coartistName, '在此输入协作者')
+            input(type="hidden", id="_coartist", name="_coartist", value=coartistId)
+            //- +selects('作者', 'artist', '', '----')
+            +field('分类', 'text', 'category', 'category', '', artwork.category, '在此输入艺术品大类')
+
+          .row
+            +field('时代', 'text', 'times', 'times', '', artwork.times, '在此输入艺术品名称')
+            +field('尺寸', 'text', 'size', 'size', '', artwork.size, '在此输入艺术品名称')
+
+          .row
+            +field('三真链接', 'text', 'url', 'url', '', artwork.url, '在此输入艺术品名称')
+            +fileField('作品照片', 'photos', 'photos')
+
+          .row
+            //- +field('备注', 'text', 'remarks', 'remarks', '', artwork.remarks, '')
+            //- .form-group
+            .col-md-2
+              label.control-label(for="remarks") 备注
+            .col-md-10
+              input.form-control(id="remarks", type="text", name="remarks", value=artwork.remarks)
+
+          .row
+            .col-xs-12.col-md-4.col-md-offset-4
+              input(type="submit", value="保存更改").btn.btn-success.form-control
+//- block scripts
+//-   script(src="/js/artwork_edit.js")

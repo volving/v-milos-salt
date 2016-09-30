@@ -16,14 +16,14 @@ block content
     .row
       .col-md-4.col-md-offset-1
         //- mixin field(_label, _for, _type, _name, _id, _class)
-        +field('姓名', 'name', 'text', 'name', 'name', '')
-        +field('身份证号', 'idno', 'text', 'idno', 'idno', '')
-        +field('电话', 'tel', 'text', 'tel', 'tel', '')
+        +field('姓名', 'text', 'name', 'name', '')
+        +field('身份证号', 'text', 'idno', 'idno', '')
+        +field('电话', 'text', 'tel', 'tel', '')
         //- +field('备注', 'remarks', 'text', 'remarks', 'remarks', '')
 
       .col-md-4.col-md-offset-2
-        +fileField('认证附件', 'attachments', 'file', 'attachments', 'attachments', 'essential')
-        +fileField('作品合影', 'photos', 'file', 'photos', 'photos', 'essential')
+        +fileField('认证附件', 'file', 'attachments', 'attachments', 'essential')
+        +fileField('作品合影', 'file', 'photos', 'photos', 'essential')
     br
     .row
       .col-md-4.col-md-offset-4

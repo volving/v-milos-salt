@@ -29,11 +29,11 @@ block body
       .row
         .col-md-4.col-md-offset-1
           //- mixin field(_label, _for, _type, _name, _id, _class)
-          +fileField('全景图', 'fullview', 'file', 'fullview', 'fullview', 'essential')
-          +fileField('预览图', 'preview', 'file', 'preview', 'preview', 'essential')
-          +fileField('纸纹图', 'magnifyview', 'file', 'magnifyview', 'magnifyview', 'essential')
-          +field('镜头倍数', 'zoom', 'text', 'zoom', 'zoom', '')
-          +field('备注', 'remarks', 'text', 'remarks', 'remarks', '')
+          +fileField('全景图', 'file', 'fullview', 'fullview', 'essential')
+          +fileField('预览图', 'file', 'preview', 'preview', 'essential')
+          +fileField('纸纹图', 'file', 'magnifyview', 'magnifyview', 'essential')
+          +field('镜头倍数', 'text', 'zoom', 'zoom', '')
+          +field('备注', 'text', 'remarks', 'remarks', '')
 
         .col-md-5.col-md-offset-1.text-center
           br

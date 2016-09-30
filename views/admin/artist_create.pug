@@ -7,16 +7,16 @@ block content
   br
   form.form-horizontal(action="/admin/artist/create" role="form" method="POST")
     input(type="hidden" name="_csrf" value=csrfToken)
-    +field('姓名', 'name', 'text', 'name', 'name', 'essential')
-    +field('职务', 'title', 'text', 'title', 'title', '')
-    +field('字号', 'called', 'text', 'called', 'called', '')
-    +field('诞辰', 'dob', 'date', 'dob', 'dob', '')
-    +field('备注', 'remarks', 'text', 'remarks', 'remarks', '')
+    +field('姓名', 'text', 'name', 'name', 'essential')
+    +field('职务', 'text', 'title', 'title', '')
+    +field('字号', 'text', 'called', 'called', '')
+    +field('诞辰', 'date', 'dob', 'dob', '')
+    +field('备注', 'text', 'remarks', 'remarks', '')
     .row
       .form-group
         input(id="onplatform", type="checkbox", name="onplatform")
         label.control-label(for="onplatform") &nbsp;&nbsp;本艺术家档案在"三真艺术"平台有收录
-    +field('URL', 'url', 'text', 'url', 'url', '')
+    +field('URL', 'text', 'url', 'url', '')
     .row
       .form-group
         .col-xs-12.col-md-4.col-md-push-4

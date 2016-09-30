@@ -14,11 +14,11 @@ block body
       .row
         .col-md-4.col-md-offset-4
           h3.text-center 申请者资料
-          +field('姓名', 'name', 'text', 'name', 'name', 'essential')
-          +field('手机号', 'tel', 'text', 'tel', 'tel', 'essential')
-          +field('身份证号', 'idno', 'text', 'idno', 'idno', 'essential')
-          +fileField('认证附件', 'attachments', 'file', 'attachments', 'attachments', 'essential')
-          +fileField('与作品合影', 'photos', 'file', 'photos', 'photos', 'essential')
+          +field('姓名', 'text', 'name', 'name', 'essential')
+          +field('手机号', 'text', 'tel', 'tel', 'essential')
+          +field('身份证号', 'text', 'idno', 'idno', 'essential')
+          +fileField('认证附件', 'attachments', 'attachments', 'essential')
+          +fileField('与作品合影', 'photos', 'photos', 'essential')
 
           //- h3.text-center 上传对比纸纹图
           //- +fileField('纸纹图(可选择多张)', 'magnifyviews', 'file', 'magnifyviews', 'magnifyviews', '', 'multiple')

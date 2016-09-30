@@ -1,0 +1,57 @@
+extends ../layout
+
+block body
+  .container
+    h1.text-center 艺术品
+    if artworks && artworks.length > 0
+      each item in artworks
+        .panel.panel-default
+          .panel-heading
+            -var url = "/artwork/edit?_id=" + item._id
+            a(href=url)
+              i.glyphicon.glyphicon-pencil &nbsp;
+              span 修改
+          .panel-body
+            .row
+              .col-xs-3.col-md-1
+                p.bg-info 标题
+              .col-xs-3.col-md-2
+                p= item.title
+              if item.artist
+                .col-xs-3.col-md-1
+                  p.bg-info 作者
+                .col-xs-3.col-md-2
+                  p= item.artist.name
+              if item.coartist
+                .col-xs-3.col-md-1
+                  p.bg-info 协作者
+                .col-xs-3.col-md-2
+                  p= item.coartist.name
+              .col-xs-3.col-md-1
+                p.bg-info 分类
+              .col-xs-3.col-md-2
+                p= item.category
+              .col-xs-3.col-md-1
+                p.bg-info 时代
+              .col-xs-3.col-md-2
+                p= item.times
+              .col-xs-12.col-md-12
+                p.bg-info 尺寸
+              .col-xs-12.col-md-12
+                p= item.size
+              .col-xs-12.col-md-12
+                p.bg-info 备注
+              .col-xs-12.col-md-12
+                p= item.remarks
+              .col-xs-12.col-md-12
+                p.bg-info 三真链接
+              .col-xs-12.col-md-12
+                p= item.url
+
+              if item.photos
+                .col-xs-12.col-md12
+                  p.bg-info 图像
+                each photo in item.photos
+                  .col-xs-12.col-md-6
+                    -var url = '/uploads/' + photo
+                    img(src=url, alt="").img-responsive

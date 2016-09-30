@@ -19,7 +19,6 @@ router.post('/save', function (req, res, next) { //jshint ignore:line
     var f = req.body;
     var username = f.username;
     var id = req.session && req.session.passport && req.session.passport.user;
-    console.log(req.session);
     if (!id) {
         warning.push('请先登录');
     }

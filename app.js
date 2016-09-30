@@ -110,6 +110,8 @@ var admin = require('./routes/admin');
 var verify = require('./routes/verify');
 // var super = require('./routes/super');
 var user = require('./routes/user');
+var artwork = require('./routes/artwork');
+
 
 
 
@@ -122,6 +124,7 @@ app.use('/compare', compare);
 app.use('/admin', admin);
 app.use('/verify', verify);
 app.use('/user', user);
+app.use('/artwork', artwork);
 
 // app.use('/super', super);
 
