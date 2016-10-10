@@ -50,5 +50,8 @@ router.post('/save', function (req, res, next) { //jshint ignore:line
         return res.redirect('/user');
     });
 });
+// router.get('', function(req, res, next) { //jshint ignore: line
+
+// });
 
 module.exports = router;
