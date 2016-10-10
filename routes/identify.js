@@ -102,7 +102,7 @@ router.get('/ack', function (req, res) { //jshint ignore: line
 
 router.get('/pre', function (req, res) { //jshint ignore: line
     res.render('./identify/pre', {
-        // csrfToken: req.csrfToken(),
+        // csrfToken: req.csrfToken()
     });
 });
 

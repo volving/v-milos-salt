@@ -11,6 +11,10 @@ mixin field(_label, _type, _name, _id, _class, _value, _placeholder)
   .col-md-4
     input.form-control(class=_class, id=_id, type=_type, name=_name, value=_value, placeholder=_placeholder)
 
+mixin fieldBlock(_label, _type, _name, _id, _class, _value, _placeholder)
+  label.control-label(for=_id)= _label
+  input.form-control(class=_class, id=_id, type=_type, name=_name, value=_value, placeholder=_placeholder)
+
 mixin fileField(_label, _name, _id, _class, _multi)
   //- .form-group
   .col-md-2
@@ -28,6 +32,9 @@ mixin fileField(_label, _name, _id, _class, _multi)
 //-       else
 //-         input.form-control(class=_class, id=_id, type="file", name=_name, accept="image/*")
 //-       //- multiple=_multi,
+mixin fileFieldBlock(_label, _name, _id, _class, _multi)
+  label.control-label(for=_id)= _label
+  input.form-control(type="file", name=_name, id=_id, class=_class, multiple=_multi).fileInput
 
 mixin limitFileField(_label, _name, _id, _class)
   .row

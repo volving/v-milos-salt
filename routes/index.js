@@ -34,14 +34,14 @@ var getCaptcha = function () {
 
 router.get('/register', function (req, res) { //jshint ignore: line
 
-    var _csrf = req.csrfToken();
-    res.cookie('_csrf', _csrf);
+    // var _csrf = req.csrfToken();
+    // res.cookie('_csrf', _csrf);
 
     var captcha = getCaptcha();
     res.cookie('_captcha', captcha[0]);
 
     return res.render('register', {
-        _csrf: _csrf,
+        // _csrf: _csrf,
         capCode: captcha[0],
         capImg: captcha[1]
     });
