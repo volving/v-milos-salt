@@ -7,7 +7,7 @@ mixin field(_label, _type, _name, _id, _class, _placeholder, _value)
       input.form-control(class=_class, id=_id, type=_type, name=_name, value=_value, placeholder=_placeholder)
 
 block body
-  .container
+  .container.userProfile
     .panel.panel-default
       .panel-heading.text-center
         h2 用户中心
@@ -56,3 +56,23 @@ block body
           .form-group
             .col-xs-12.col-md-4.col-md-push-4
               button#submit.btn.btn-success.col-xs-12(type="submit") 提交
+
+    .panel.panel-default
+      .panel-heading.text-center
+        h3 权限申请
+      .panel-body
+        .row
+
+          .col-md-3.col-sm-6.col-xs-12
+            if (user.usertype.indexOf('artist') > -1)
+              span.btn.btn-warning.form-control.disabled 已经成为认证艺术家
+            else
+              a(href="/user/apply/artist").btn.btn-primary.form-control 申请成为认证艺术家
+
+
+          .col-md-3.col-sm-6.col-xs-12
+            if (user.usertype.indexOf('artist') > -1)
+              span.btn.btn-warning.form-control.disabled 已经成为管理员
+            else
+              a(href="/user/apply/admin").btn.btn-primary.form-control 申请成为管理员
+
