@@ -14,9 +14,9 @@ block body
 
     if identifys && identifys.length > 0
       .row#results
-        .col-xs-12
+        div(style="columns: 3").col-xs-12
           each item, index in identifys
-            div(style="margin: .5em; padding: .5em; display: inline-block; float: left; width: 300px; box-shadow: 0 0 1px 0 grey;")
+            div.item
               //- div= item
               if item.docs[0]
                 -var src='/uploads/'+item.docs[0].fullview
@@ -46,6 +46,6 @@ block body
                   a(href=durl).btn.btn-success.col-xs-4.col-xs-offset-2 详情
                 else
                   span.btn.btn-warning.disabled.col-xs-4.col-xs-offset-2 暂无详情
-            if (index+1)%3 === 0
-              .row
+            //- if (index+1)%3 === 0
+            //-   .row
 
