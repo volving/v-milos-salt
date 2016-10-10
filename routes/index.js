@@ -18,14 +18,36 @@ var Identify = require('../models/Identify');
 router.get('/', function (req, res, next) { //jshint ignore: line
     res.render('index');
 });
-router.get('/register', function (req, res) { //jshint ignore: line
-    res.render('register', {
-        // csrfToken: req.csrfToken()
-        captcha: 'capti'
+
+
+
+//------------------------------------------------Start of 注册
+var svgCaptcha = require('svg-captcha');
+var getCaptcha = function () {
+    var capCode = svgCaptcha.randomText({
+        size: 4,
+        ignoreChars: '0Oo2Zz1IiLlb6'
     });
-    // req.flash('warning', '注册功能暂不开放!');
-    // return res.redirect('/');
+    var capImg = svgCaptcha(capCode);
+    return [capCode, capImg];
+};
+
+router.get('/register', function (req, res) { //jshint ignore: line
+
+    var _csrf = req.csrfToken();
+    res.cookie('_csrf', _csrf);
+
+    var captcha = getCaptcha();
+    res.cookie('_captcha', captcha[0]);
+
+    return res.render('register', {
+        _csrf: _csrf,
+        capCode: captcha[0],
+        capImg: captcha[1]
+    });
 });
+
+
 /*
 var getTypes = function (str) {
     if (!str || str.length < 1) {
@@ -44,6 +66,35 @@ var getTypes = function (str) {
     return types;
 };
 */
+
+router.get('/captcha', function(req, res, next) { //jshint ignore: line
+    var captcha = getCaptcha(req, res); // [capCode, capImg]
+    req.session.captcha = captcha[0];
+    res.set('Content-Type', 'image/svg+xml');
+    res.status(200);
+    return res.send(captcha[1]);
+});
+
+var verifycodes = {};
+router.get('/vcode', function(req, res, next) { //jshint ignore: line
+    var phone = req.query.phone;
+
+    verifycodes[phone] = {
+        last: Date.now()
+    };
+    var warning = [];
+    var captcha = '';
+    // verifycodes.phone = form.
+    if (captcha !== req.session.captcha.toLowerCase()) {
+        warning.push('验证码不正确');
+    }
+    if (warning.length > 0) {
+        req.flash('warning', warning);
+    }
+    return res.json({message:'I`ve received!'});
+});
+
+
 var check = require('../bin/check');
 
 
@@ -51,9 +102,9 @@ router.post('/register', /*uploader.fields([ { name: 'attachments' }, //, maxCou
     var form = req.body;
     var username = form.username || '';
     var warning = [];
-    var captcha = form.captcha;
-    if (captcha !== req.session.captcha) {
-        warning.push('验证码不正确');
+    var vcode = form.vcode && form.vcode.toLowerCase();
+    if (vcode !== req.session.vcode) {
+        warning.push('短信验证码不正确');
     }
     if (form.usercontract !== 'on') {
         warning.push('您必须同意且遵守我们的《用户协议》');
@@ -94,7 +145,7 @@ router.post('/register', /*uploader.fields([ { name: 'attachments' }, //, maxCou
                 password: form.password || 'oooooo',
                 mobile: username || '',
                 remarks: form.remarks || ''
-                // usertype: getTypes(form.usertype)
+                    // usertype: getTypes(form.usertype)
             });
 
             newUser.save(function (err, user) { //jshint ignore: line
@@ -110,6 +161,7 @@ router.post('/register', /*uploader.fields([ { name: 'attachments' }, //, maxCou
     });
 });
 
+//------------------------------------------------End __of 注册
 
 router.get('/login', function (req, res) { //jshint ignore: line
     res.render('login', {
