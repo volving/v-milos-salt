@@ -9,7 +9,9 @@ mixin field(_label, _type, _name, _id, _class, _value, _disabled)
 mixin imgview(_heading, _imgname)
   .col-md-6.col-xs-12
     .panel.panel-default
-      .panel-heading= _heading
+      .panel-heading
+        span= _heading
+        span= ' (点击图片转到三真艺术网艺术品详情) '
       .panel-body
         if _imgname
           -var url = '/uploads/' + _imgname
