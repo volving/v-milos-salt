@@ -27,6 +27,7 @@ block body
       .panel-body
         +field('艺术品名称', 'text', 'title', 'title', '', identify.artwork.title, true)
         +field('大类', 'text', 'category', 'category', '', identify.artwork.category, true)
+        +field('url', 'text', 'url', 'url', '', identify.artwork.url, true)
         each item in identify.docs
           .row
             +imgview('全景图', item.fullview)
