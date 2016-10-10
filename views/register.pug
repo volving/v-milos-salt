@@ -1,39 +1,47 @@
 extends layout
 
 //- Created by volving on 8/31/16.
-mixin field(_label, _for, _type, _name, _id, _class, _placeholder)
+mixin field(_label, _type, _name, _id, _class, _placeholder)
   .form-group
-    label.col-md-4.control-label(for=_for) #{_label}
+    label.col-md-4.control-label(for=_id)=_label
     .col-md-4
-      input.form-control(class=_class id=_id type=_type name=_name)
+      input.form-control(class=_class, id=_id, type=_type, name=_name, placeholder=_placeholder)
 
 block body
   .container
     h1.text-center 新用户注册
     br
-
   .container
-    form.form-horizontal(action="/register" role="form" method="POST" enctype="multipart/x-www-form-urlencoded")
-      input(type="hidden" name="_csrf" value=csrfToken)
+    form.form-horizontal#registerForm(action="/register" role="form" method="POST" enctype="multipart/x-www-form-urlencoded")
 
-      +field('手机号', 'username', 'text', 'username', 'username', '', '请在此处输入手机号')
+      input(type="hidden" name="_csrf" value=_csrf)
+
+      +field('手机号', 'text', 'username', 'username', '', '例如: 150 1234 1234')
       .form-group
-        label.col-md-4.control-label(for=_for) 验证码
-        .col-md-2
-          input.form-control(type="text", id="captcha", name="captcha", placeholder="在此输入验证码", autocomplete="off")
-        .col-md-2
-          input.form-control(type="button", value="发送验证码").btn.btn-success
-      +field('登录密码', 'password', 'password', 'password', 'password', '', '')
+        .row
+          label.col-md-4.control-label(for="captcha") 验证码
+          .col-md-2
+            //- img#captchaImg(src="/captcha", alt="").col-md-12.img-responsive
+            a(href="")!= capImg
+
+        .row
+          .col-md-2.col-md-offset-4
+            input.form-control(type="text", id="captcha", name="captcha", placeholder="在此输入上图中的字符", autocomplete="off")
+          .col-md-2
+            span#sendVcode.form-control.btn.btn-success.disabled 发送验证码
+      +field('短信验证码', 'text', 'vcode', 'vcode', '', '')
+      +field('登录密码', 'password', 'password', 'password', '', '')
       +field('备注', 'text', 'remarks', 'remarks', '', '')
 
       .form-group
-        .col-md-3.col-md-push-5
+        .col-md-3.col-md-push-4
           input#usercontract(type="checkbox" name="usercontract")
           label(for="usercontract") &nbsp;我同意且遵守
           a(href="#") 《用户协议》
 
       .form-group
         .col-xs-12.col-md-4.col-md-push-4
-          button#submit.btn.btn-primary.col-xs-12(type="submit") 提交
+          span#submit.btn.btn-primary.col-xs-12.disabled 提交
 
-  script(src="")
+  script(src="/js/checkutils.js")
+  script(src="/js/register.js")
