@@ -27,11 +27,10 @@ block body
       .panel-body
         +field('艺术品名称', 'text', 'title', 'title', '', identify.artwork.title, true)
         +field('大类', 'text', 'category', 'category', '', identify.artwork.category, true)
-        +field('url', 'text', 'url', 'url', '', identify.artwork.url, true)
-
+        //- +field('url', 'text', 'url', 'url', '', identify.artwork.url, true)
         .form-group.col-md-4.col-xs-6
           label 三真链接
-          a(href=identify.artwork.url).form-control
+          a(href=identify.artwork.url).form-control #{identify.artwork.url}
         each item in identify.docs
           .row
             +imgview('全景图', item.fullview)
