@@ -30,7 +30,7 @@ router.get('/', function (req, res, next) { //jshint ignore: line
         }
     }, {
         path: 'artwork',
-        select: 'title category'
+        select: 'title category url'
     }]).exec(function (err, identify) {
         if (err) {
             req.flash('warning', ['查询出错']);
