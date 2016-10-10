@@ -13,7 +13,8 @@ mixin imgview(_heading, _imgname)
       .panel-body
         if _imgname
           -var url = '/uploads/' + _imgname
-          img(src=url, alt=_heading).img-responsive
+          a(href=identify.artwork.url, alt="点击转到三真艺术网艺术品详情")
+            img(src=url, alt=_heading).img-responsive
         else
           p 无
 
