@@ -42,7 +42,7 @@ block body
         .panel-body
           +field('艺术品名称', 'text', 'title', 'title', '', identify.artwork.title)
           +field('大类', 'text', 'category', 'category', '', identify.artwork.category)
-          +field('URL', 'text', 'url', 'url', '', identify.artwork.url)
+          +field('三真链接', 'text', 'url', 'url', '', identify.artwork.url)
           each item in identify.docs
             .row
               +imgview('全景图', item.fullview)
