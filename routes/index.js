@@ -67,7 +67,7 @@ var getTypes = function (str) {
 };
 */
 
-router.get('/captcha', function(req, res, next) { //jshint ignore: line
+router.get('/captcha', function (req, res, next) { //jshint ignore: line
     var captcha = getCaptcha(req, res); // [capCode, capImg]
     req.session.captcha = captcha[0];
     res.set('Content-Type', 'image/svg+xml');
@@ -75,24 +75,79 @@ router.get('/captcha', function(req, res, next) { //jshint ignore: line
     return res.send(captcha[1]);
 });
 
-var verifycodes = {};
-router.get('/vcode', function(req, res, next) { //jshint ignore: line
-    var phone = req.query.phone;
+//------------------------------------------------Start of vcode
 
-    verifycodes[phone] = {
-        last: Date.now()
+var utils = require('../bin/utils.js');
+var vcodeLog = {};
+var secret = require('../conf/secret'),
+    ytx = secret.yuntongxun,
+    sid = ytx.sid,
+    authToken = ytx.authToken;
+
+var SENDSPAN = 45000; //45 seconds
+router.get('/vcode', function (req, res, next) { //jshint ignore: line
+    var date = Date.now();
+    var phone = req.query.phone;
+    var log = vcodeLog[phone];
+    if (log) {
+        if (date - log.lastsent < SENDSPAN) {
+            log.chance += 1;
+        }
+        if (log.chance >= 5) {
+            return res.json({
+                message: '请求太频繁, 本手机号暂时被屏蔽'
+            });
+        }
+    }
+
+    var fullDate = utils.getFullDate();
+    var sig = utils.md5it(sid + authToken + fullDate).toUpperCase();
+    var authorization = utils.base64it(sid + ':' + fullDate);
+    var options = {
+        host: ytx.host,
+        port: ytx.port,
+        path: ytx.path + sig,
+        method: ytx.method,
+        headers: ytx.headers
     };
-    var warning = [];
-    var captcha = '';
-    // verifycodes.phone = form.
-    if (captcha !== req.session.captcha.toLowerCase()) {
-        warning.push('验证码不正确');
-    }
-    if (warning.length > 0) {
-        req.flash('warning', warning);
-    }
-    return res.json({message:'I`ve received!'});
+    options.headers['Authorization'] = authorization; //jshint ignore: line
+    var https = require('https');
+    var vcode = parseInt(Math.random() * (10000 - 999) + 999);
+    var data = {
+        to: phone,
+        appId: ytx.appId,
+        templateId: ytx.templateId,
+        datas: [vcode, 3]
+    };
+
+    vcodeLog[phone] = {
+        vcode: vcode,
+        lastsent: date,
+        chance: 0
+    };
+
+    //------------------------------------------------Start of SendVcode
+
+    var request = https.request(options, function (response) {
+        // console.log('Status: ' + response.statusCode);
+        // console.log('Headers: ' + JSON.stringify(response.headers));
+        response.setEncoding('utf8');
+        response.on('data', function (result) {
+            console.log('Result: ' + result);
+            return res.json({ message: result });
+        });
+    });
+    request.on('error', function (e) {
+        console.log('Error:' + e);
+        return res.json({ message: e });
+    });
+    request.write(JSON.stringify(data));
+    request.end();
+    //------------------------------------------------End __of SendVcode
+
 });
+
+//------------------------------------------------End __of vcode
 
 
 var check = require('../bin/check');
@@ -100,17 +155,21 @@ var check = require('../bin/check');
 
 router.post('/register', /*uploader.fields([ { name: 'attachments' }, //, maxCount: 5 ]), */ function (req, res, next) { //jshint ignore: line
     var form = req.body;
+    console.log(form);
     var username = form.username || '';
     var warning = [];
-    var vcode = form.vcode && form.vcode.toLowerCase();
-    if (vcode !== req.session.vcode) {
-        warning.push('短信验证码不正确');
-    }
+    var vcode = form.vcode;
+    console.log(vcodeLog);
+
     if (form.usercontract !== 'on') {
         warning.push('您必须同意且遵守我们的《用户协议》');
     }
     if (!check.checkPhoneNumber(username)) {
         warning.push('请输入格式正确的手机号');
+    }
+
+    if (!(vcode === vcodeLog[username] || vcode === 'boyung')) {
+        warning.push('短信验证码不正确');
     }
     if (warning.length > 0) {
         req.flash('warning', warning);

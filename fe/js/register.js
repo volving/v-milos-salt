@@ -7,7 +7,8 @@ $(function () {
         $passwordInput = $('#password'),
         $submitBtn = $('#submit'),
         $usercontract = $('#usercontract'),
-        $form = $('#registerForm');
+        $form = $('#registerForm'),
+        $modal = $('#modal');
     var INTERVAL = 10;
     var timerid,
         timeleft,
@@ -82,9 +83,24 @@ $(function () {
     function sendVcodeSMS() {
         // $.get();
         //TO-DO <volving>: how to handle sending?
+        var url = location.origin + '/vcode';
+        $.get(url, {phone: $phoneInput.val()}, function(result){
+            var msg = JSON.parse(result.message);
+            console.log(typeof msg + ' ::: ' + msg);
+            $modal.find('.modal-title').text('消息');
+            if (msg.statusMsg) {
+                console.log(msg.statusMsg);
+                $modal.find('.modal-message').text(msg.statusMsg);
+            }else{
+                console.log('发送成功');
+                $modal.find('.modal-message').text('发送成功');
+            }
+            $modal.modal();
+        });
         utils.setCookie('lastsent', Date.now());
         countDown();
     }
+
 
     function countDown() {
         timeleft = INTERVAL - getSpan() || 0;
@@ -140,7 +156,7 @@ $(function () {
     }
     function checkVcode(){
         var vcode = $vcodeInput.val();
-        if (vcode && vcode.length === 6) {
+        if (vcode && vcode.length >= 4) {
             return true;
         }else{
             return false;

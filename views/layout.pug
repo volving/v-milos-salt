@@ -47,6 +47,16 @@ html
     //-   i.glyphicon.glyphicon-home &nbsp;&nbsp;返回首页
     br
     br
+    div(class="modal fade", id="modal",role="dialog")
+      .modal-dialog.modal-lg
+        .modal-content
+          .modal-header
+            button(type="button", data-dismiss="modal").close &times;
+            h4.modal-title
+          .modal-body
+            p.modal-message
+          .modal-footer
+            button(type="button", data-dismiss="modal").btn.btn-primary.text-center 关闭
     .container
       if (error && error.length > 0)
         .alert.alert-danger.alert-dismissible(role="alert")#error
