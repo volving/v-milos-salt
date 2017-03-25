@@ -42,6 +42,7 @@
   "devDependencies": {
     "eslint": "^3.18.0",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-newer": "^1.2.0"
+    "grunt-newer": "^1.2.0",
+    "pug-lint": "^2.4.0"
   }
 }
